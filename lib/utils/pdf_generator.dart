@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import '../controller/invoice_controller.dart';
-import '../models/models.dart';
 import 'formatters.dart';
 import '../services/firestore_service.dart';
 
@@ -23,7 +22,6 @@ class InvoicePdfGenerator {
               pw.Text('Invoice ID: ${v.invoice.id}'),
               pw.Text('Date: ${dateLong.format(v.invoice.dateIssued)}'),
               pw.Text('Status: ${toBeginningOfSentenceCase(v.invoice.status)}'),
-              pw.Text('Approved: ${v.invoice.approved ? 'Yes' : 'No'}'),
             ]),
             pw.Column(crossAxisAlignment: pw.CrossAxisAlignment.end, children: [
               pw.Text(v.customer?.name ?? 'Unknown'),
@@ -35,7 +33,7 @@ class InvoicePdfGenerator {
           pw.Text('Job & Vehicle', style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
           pw.SizedBox(height: 6),
           pw.Text(v.job?.description ?? ''),
-          pw.Text('${v.vehicle?.make ?? ''} ${v.vehicle?.model ?? ''} (${v.vehicle?.year ?? ''}) • VIN ${v.vehicle?.vin ?? ''}'),
+          pw.Text('${v.vehicle?.make ?? ''} ${v.vehicle?.model ?? ''} (${v.vehicle?.year ?? ''})  VIN ${v.vehicle?.vin ?? ''}'),
           pw.SizedBox(height: 16),
           pw.Table.fromTextArray(
             headers: ['Description', 'Qty', 'Price', 'Amount'],
