@@ -187,12 +187,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      bottomNavigationBar: BottomNavigation(
-        currentIndex: 0,
-        onTap: (index) {
-          // Handle navigation
-        },
-      ),
     );
   }
 

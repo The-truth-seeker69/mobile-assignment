@@ -43,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+#firebase setup and admin credentials
+/lib/db/serviceAccountKey.json
+/android/app/google-services.json

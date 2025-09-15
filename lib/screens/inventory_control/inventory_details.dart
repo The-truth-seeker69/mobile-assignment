@@ -269,12 +269,6 @@ class InventoryDetailsScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigation(
-        currentIndex: 0,
-        onTap: (index) {
-          // Handle navigation
-        },
-      ),
     );
   }
 
