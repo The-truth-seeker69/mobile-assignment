@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../models/inventory_item.dart';
 import '../../widgets/bottom_navigation.dart';
 import 'item_request_screen.dart';
+import 'dart:io';
+import 'request_log.dart'; // Import the request log screen
 
 class InventoryDetailsScreen extends StatelessWidget {
   final InventoryItem item;
@@ -59,29 +61,28 @@ class InventoryDetailsScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      '${item.name} (${item.partCode})',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
+
                     const SizedBox(height: 20),
 
                     // Item Image
                     Container(
                       width: double.infinity,
-                      height: 120,
+                      height: 320,
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Icon(
-                        Icons.inventory_2,
-                        color: Colors.grey,
-                        size: 60,
-                      ),
+
+                        child: item.imagePath.isNotEmpty
+                            ? Image.file(
+                          File(item.imagePath),
+                          fit: BoxFit.cover,
+                        )
+                            : const Icon(
+                          Icons.inventory_2,
+                          color: Colors.grey,
+                          size: 30,
+                        )
                     ),
                     const SizedBox(height: 20),
 
@@ -96,14 +97,7 @@ class InventoryDetailsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '${item.name} (${item.partCode})',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
+
                           const SizedBox(height: 8),
                           Text(
                             'Category: ${item.category}',
@@ -259,6 +253,45 @@ class InventoryDetailsScreen extends StatelessWidget {
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
+
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    // Added spacing between buttons
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => RequestLogScreen(item: item),
+                            ),
+                          );
+                        },
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: Colors.black,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          side: const BorderSide(color: Colors.black),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.history, size: 20),
+                            SizedBox(width: 8),
+                            Text(
+                              'View Request Log',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -278,11 +311,13 @@ class InventoryDetailsScreen extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime date) {
+  String _formatDate(DateTime? date) {
+    if (date == null) return "N/A"; // or "No record", up to you
     const months = [
       'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
       'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
+
 }

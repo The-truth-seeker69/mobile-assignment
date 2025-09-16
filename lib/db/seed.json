@@ -1,0 +1,120 @@
+{
+  "customers": {
+    "cust001": {
+      "name": "John Doe",
+      "phone": "+60123456789",
+      "email": "john@example.com",
+      "address": "123 Main St, Kuala Lumpur",
+      "vehicles": ["veh001"]
+    },
+    "cust002": {
+      "name": "Sarah Lee",
+      "phone": "+60119876543",
+      "email": "sarah@example.com",
+      "address": "45 Jalan Bukit, Penang",
+      "vehicles": ["veh002", "veh003"]
+    }
+  },
+
+  "vehicles": {
+    "veh001": {
+      "customerId": "cust001",
+      "make": "Toyota",
+      "model": "Corolla",
+      "year": 2020,
+      "vin": "JT12345ABC67890"
+    },
+    "veh002": {
+      "customerId": "cust002",
+      "make": "Honda",
+      "model": "Civic",
+      "year": 2019,
+      "vin": "HN54321XYZ12345"
+    },
+    "veh003": {
+      "customerId": "cust002",
+      "make": "Perodua",
+      "model": "Myvi",
+      "year": 2022,
+      "vin": "MY99887LMNOP345"
+    }
+  },
+
+  "mechanics": {
+    "mech001": {
+      "name": "Ali Bin Omar",
+      "specialization": "Engine Repair",
+      "availability": true
+    },
+    "mech002": {
+      "name": "James Tan",
+      "specialization": "Brake Systems",
+      "availability": true
+    }
+  },
+
+  "inventory": {
+    "IT002": {
+      "category": "Brake",
+      "createdAt": "16 September 2025 at 14:11:22 UTC+8",
+      "imagePath": "/data/user/0/com.example.assignment/code_cache/1758003076044_IT002.jpg",
+      "isLowStock": true,
+      "itemID": "IT002",
+      "lastRefill": null,
+      "name": "Brake Pad",
+      "quantity": 5,
+      "remarks": "brake",
+      "supplier": "toyota",
+      "usageLog": []
+    }
+  },
+
+  "jobs": {
+    "job001": {
+      "vehicleId": "veh001",
+      "mechanicId": "mech002",
+      "status": "assigned",
+      "scheduledDate": "2025-09-15",
+      "completionDate": null,
+      "description": "Brake pad replacement",
+      "partsUsed": ["part001"]
+    },
+    "job002": {
+      "vehicleId": "veh003",
+      "mechanicId": "mech001",
+      "status": "completed",
+      "scheduledDate": "2025-09-10",
+      "completionDate": "2025-09-12",
+      "description": "Engine oil change",
+      "partsUsed": ["part002"]
+    }
+  },
+
+  "invoices": {
+    "inv001": {
+      "jobId": "job002",
+      "customerId": "cust002",
+      "dateIssued": "2025-09-12",
+      "items": [
+        { "description": "Engine Oil 4L", "quantity": 1, "price": 120.0 },
+        { "description": "Labor", "quantity": 1, "price": 100.0 }
+      ],
+      "totalAmount": 220.0,
+      "status": "paid",
+      "paymentDate": "2025-09-13"
+    }
+  },
+
+  "requests": {
+    "RQ001": {
+      "itemId": "IT002",
+      "quantity": 3,
+      "notes": "Needed urgently for upcoming job"
+    },
+    "RQ002": {
+      "itemId": "IT002",
+      "quantity": 1,
+      "notes": "Stock check replacement"
+    }
+  }
+}
