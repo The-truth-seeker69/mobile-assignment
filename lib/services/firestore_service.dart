@@ -20,13 +20,6 @@ class FirestoreInvoiceService {
     }, SetOptions(merge: true));
   }
 
-  Future<void> markInvoicePaid(String invoiceId) async {
-    await _invoicesCol.doc(invoiceId).set({
-      'status': 'paid',
-      'paymentDate': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
-  }
-
   Future<Customer?> getCustomer(String customerId) async {
     if (customerId.isEmpty) return null;
     final snap = await _db.collection('customers').doc(customerId).get();

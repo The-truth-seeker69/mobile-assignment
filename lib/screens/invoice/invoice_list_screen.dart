@@ -1,10 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../controller/invoice_controller.dart';
 import '../../widgets/invoice_list_item.dart';
 import 'invoice_report_screen.dart';
-import '../../widgets/bottom_navigation.dart';
 
 class InvoicesListScreen extends StatefulWidget {
   const InvoicesListScreen({super.key});
@@ -14,35 +12,6 @@ class InvoicesListScreen extends StatefulWidget {
 }
 
 class _InvoicesListScreenState  extends State<InvoicesListScreen> {
-
-  int _selectedIndex = 3; // ✅ Invoices tab is selected by default
-
-  void _onNavTap(int index) {
-    setState(() => _selectedIndex = index);
-
-    // Navigate based on index
-    switch (index) {
-      case 0:
-      // Go to Inventory page
-        Navigator.pushNamed(context, '/inventory');
-        break;
-      case 1:
-      // Go to Scheduler page
-        Navigator.pushNamed(context, '/scheduler');
-        break;
-      case 2:
-      // Go to Vehicles page
-        Navigator.pushNamed(context, '/vehicles');
-        break;
-      case 3:
-      // Already on Invoices page (do nothing)
-        break;
-      case 4:
-      // Go to CRM page
-        Navigator.pushNamed(context, '/crm');
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,39 +40,32 @@ class _InvoicesListScreenState  extends State<InvoicesListScreen> {
                     const SizedBox(width: 8),
                     ChoiceChip(
                       side: BorderSide.none,
-                      label: const Text('All'),
-                      selected: c.statusFilter == StatusFilter.all,
-                      onSelected: (_) => c.setStatus(StatusFilter.all),
-                    ),
-                    const SizedBox(width: 8),
-                    ChoiceChip(
-                      side: BorderSide.none,
                       label: const Text('Paid'),
                       selected: c.statusFilter == StatusFilter.paid,
-                      onSelected: (_) => c.setStatus(StatusFilter.paid),
+                      onSelected: (_) => c.toggleStatus(StatusFilter.paid),
                     ),
                     const SizedBox(width: 8),
                     ChoiceChip(
                       side: BorderSide.none,
                       label: const Text('Unpaid'),
                       selected: c.statusFilter == StatusFilter.unpaid,
-                      onSelected: (_) => c.setStatus(StatusFilter.unpaid),
+                      onSelected: (_) => c.toggleStatus(StatusFilter.unpaid),
                     ),
                     const SizedBox(width: 16),
                     const Text('Approval:'),
                     const SizedBox(width: 8),
                     ChoiceChip(
                       side: BorderSide.none,
-                      label: const Text('Unapproved'),
-                      selected: c.approvalFilter == ApprovalFilter.unapproved,
-                      onSelected: (_) => c.setApproval(ApprovalFilter.unapproved),
+                      label: const Text('Approved'),
+                      selected: c.approvalFilter == ApprovalFilter.approved,
+                      onSelected: (_) => c.toggleApproval(ApprovalFilter.approved),
                     ),
                     const SizedBox(width: 8),
                     ChoiceChip(
                       side: BorderSide.none,
-                      label: const Text('Approved'),
-                      selected: c.approvalFilter == ApprovalFilter.approved,
-                      onSelected: (_) => c.setApproval(ApprovalFilter.approved),
+                      label: const Text('Unapproved'),
+                      selected: c.approvalFilter == ApprovalFilter.unapproved,
+                      onSelected: (_) => c.toggleApproval(ApprovalFilter.unapproved),
                     ),
                   ],
                 ),
@@ -130,13 +92,6 @@ class _InvoicesListScreenState  extends State<InvoicesListScreen> {
                 ),
               ),
             ),
-            IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-              },
-            ),
-
           ],
         ),
       ),

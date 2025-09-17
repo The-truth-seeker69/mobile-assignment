@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../services/firestore_service.dart';
 
-enum StatusFilter { all, paid, unpaid }
-enum ApprovalFilter { all, approved, unapproved }
+enum StatusFilter { paid, unpaid }
+enum ApprovalFilter { approved, unapproved }
 
 class InvoiceController extends ChangeNotifier {
   final FirestoreInvoiceService _svc = FirestoreInvoiceService();
@@ -11,15 +11,15 @@ class InvoiceController extends ChangeNotifier {
   StreamSubscription? _sub;
   List<InvoiceView> _all = [];
   String _search = '';
-  StatusFilter _status = StatusFilter.all;
-  ApprovalFilter _approval = ApprovalFilter.all;
+  StatusFilter? _status;       // <-- nullable
+  ApprovalFilter? _approval;   // <-- nullable
   bool _loading = false;
 
   List<InvoiceView> get invoices => _filtered();
   bool get isLoading => _loading;
   String get search => _search;
-  StatusFilter get statusFilter => _status;
-  ApprovalFilter get approvalFilter => _approval;
+  StatusFilter? get statusFilter => _status;
+  ApprovalFilter? get approvalFilter => _approval;
 
   Future<void> load() async {
     _loading = true;
@@ -49,13 +49,22 @@ class InvoiceController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setStatus(StatusFilter f) {
-    _status = f;
+  void toggleStatus(StatusFilter f) {
+    // Clicking same filter again -> remove filter
+    if (_status == f) {
+      _status = null;
+    } else {
+      _status = f;
+    }
     notifyListeners();
   }
 
-  void setApproval(ApprovalFilter f) {
-    _approval = f;
+  void toggleApproval(ApprovalFilter f) {
+    if (_approval == f) {
+      _approval = null;
+    } else {
+      _approval = f;
+    }
     notifyListeners();
   }
 
@@ -63,20 +72,17 @@ class InvoiceController extends ChangeNotifier {
     await _svc.approveInvoice(id);
   }
 
-  Future<void> markPaid(String id) async {
-    await _svc.markInvoicePaid(id);
-  }
-
   List<InvoiceView> _filtered() {
     Iterable<InvoiceView> it = _all;
 
-    if (_status != StatusFilter.all) {
+    if (_status != null) {
       it = it.where((v) =>
       _status == StatusFilter.paid ? v.invoice.status == 'paid' : v.invoice.status != 'paid');
     }
 
-    if (_approval != ApprovalFilter.all) {
-      it = it.where((v) => _approval == ApprovalFilter.approved ? v.invoice.approved : !v.invoice.approved);
+    if (_approval != null) {
+      it = it.where((v) =>
+      _approval == ApprovalFilter.approved ? v.invoice.approved : !v.invoice.approved);
     }
 
     if (_search.isNotEmpty) {
@@ -85,7 +91,8 @@ class InvoiceController extends ChangeNotifier {
         final name = v.customer?.name.toLowerCase() ?? '';
         final invId = v.invoice.id.toLowerCase();
         final veh = '${v.vehicle?.make} ${v.vehicle?.model}'.toLowerCase();
-        return name.contains(q) || invId.contains(q) || veh.contains(q);
+        final plate = v.vehicle?.id.toLowerCase() ?? ''; // vehicle plate number
+        return name.contains(q) || invId.contains(q) || veh.contains(q) || plate.contains(q);
       });
     }
 
