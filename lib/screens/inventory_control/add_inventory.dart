@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -73,33 +71,22 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
     }
   }
 
-  /// Get application directory with fallback
-  Future<Directory> _getAppDirectory() async {
-    try {
-      return await getApplicationDocumentsDirectory();
-    } catch (e) {
-      print("❌ Error getting app directory: $e");
-      // Fallback to temporary directory
-      return Directory.systemTemp;
-    }
-  }
+
 
   /// Save image to local storage with improved error handling
+  /// Save image to local storage and return only filename
   Future<String?> _saveImageLocally(File image, String itemId) async {
     try {
-      final appDocDir = await _getAppDirectory();
-      final fileName =
-          '${DateTime.now().millisecondsSinceEpoch}_$itemId${p.extension(image.path)}';
+      final appDocDir = await getApplicationDocumentsDirectory();
+      final fileName = "$itemId${p.extension(image.path)}"; // e.g., IT001.png
       final savedImage = await image.copy('${appDocDir.path}/$fileName');
-
-      print("✅ Image saved at: ${savedImage.path}");
-      return savedImage.path;
+      return fileName; // ✅ only store filename
     } catch (e) {
-      print("❌ Error saving image locally: $e");
-      // If local saving fails, we'll still proceed without the image path
+      debugPrint("Error saving image locally: $e");
       return null;
     }
   }
+
 
   Future<void> _saveItem() async {
     if (!_formKey.currentState!.validate()) return;
@@ -143,7 +130,8 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
       await FirebaseFirestore.instance.collection('inventory').doc(newId).set({
         'itemID': newId,
         'category': _selectedCategory,
-        'imagePath': imagePath, // This might be null if saving failed
+        'imagePath': imagePath ?? '',
+        // This might be null if saving failed
         'isLowStock': int.parse(_quantityController.text.trim()) <= 5,
         'lastRefill': null,
         'name': _itemNameController.text.trim(),

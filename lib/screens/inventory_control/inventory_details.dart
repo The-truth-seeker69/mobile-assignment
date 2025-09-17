@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import '../../models/inventory_item.dart';
 import '../../widgets/bottom_navigation.dart';
 import 'item_request_screen.dart';
-import 'dart:io';
 import 'request_log.dart'; // Import the request log screen
+import '../../utils/file_helper.dart'; // ✅ import helper
+import 'dart:io';
 
 class InventoryDetailsScreen extends StatelessWidget {
   final InventoryItem item;
@@ -51,7 +52,6 @@ class InventoryDetailsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Title
                     const Text(
                       'Item Details',
                       style: TextStyle(
@@ -60,11 +60,9 @@ class InventoryDetailsScreen extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 8),
-
                     const SizedBox(height: 20),
 
-                    // Item Image
+                    // ✅ Item Image via helper
                     Container(
                       width: double.infinity,
                       height: 320,
@@ -72,21 +70,30 @@ class InventoryDetailsScreen extends StatelessWidget {
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(8),
                       ),
-
-                        child: item.imagePath.isNotEmpty
-                            ? Image.file(
-                          File(item.imagePath),
-                          fit: BoxFit.cover,
-                        )
-                            : const Icon(
-                          Icons.inventory_2,
-                          color: Colors.grey,
-                          size: 30,
-                        )
+                      child: FutureBuilder<File?>(
+                        future: getInventoryImage(item.imagePath),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return const Center(child: CircularProgressIndicator());
+                          }
+                          if (snapshot.hasData && snapshot.data != null) {
+                            return Image.file(
+                              snapshot.data!,
+                              fit: BoxFit.cover,
+                            );
+                          }
+                          return const Icon(
+                            Icons.inventory_2,
+                            color: Colors.grey,
+                            size: 30,
+                          );
+                        },
+                      ),
                     ),
+
                     const SizedBox(height: 20),
 
-                    // Item Information Section
+                    // 🔹 Item Info
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(16),
@@ -97,43 +104,29 @@ class InventoryDetailsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
-                          const SizedBox(height: 8),
                           Text(
                             'Category: ${item.category}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
+                            style: const TextStyle(fontSize: 14, color: Colors.grey),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             'Supplier: ${item.supplier}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
+                            style: const TextStyle(fontSize: 14, color: Colors.grey),
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(height: 20),
 
-                    // Inventory Details Section
+                    // 🔹 Inventory Details
                     Row(
                       children: [
-                        const Icon(
-                          Icons.person,
-                          color: Colors.grey,
-                          size: 20,
-                        ),
+                        const Icon(Icons.person, color: Colors.grey, size: 20),
                         const SizedBox(width: 8),
                         const Text(
                           'Inventory Details',
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black,
                           ),
                         ),
                       ],
@@ -141,56 +134,36 @@ class InventoryDetailsScreen extends StatelessWidget {
                     const SizedBox(height: 12),
                     Row(
                       children: [
-                        const Icon(
-                          Icons.check_circle,
-                          color: Colors.green,
-                          size: 16,
-                        ),
+                        const Icon(Icons.check_circle, color: Colors.green, size: 16),
                         const SizedBox(width: 8),
                         Text(
                           'In Stock: ${item.quantity} units',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
+                          style: const TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        const Icon(
-                          Icons.update,
-                          color: Colors.grey,
-                          size: 16,
-                        ),
+                        const Icon(Icons.update, color: Colors.grey, size: 16),
                         const SizedBox(width: 8),
                         Text(
                           'Last Refill: ${_formatDate(item.lastRefill)}',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
+                          style: const TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                       ],
                     ),
                     const SizedBox(height: 20),
 
-                    // Usage Log Section
+                    // 🔹 Usage Log
                     Row(
                       children: [
-                        const Icon(
-                          Icons.search,
-                          color: Colors.grey,
-                          size: 20,
-                        ),
+                        const Icon(Icons.search, color: Colors.grey, size: 20),
                         const SizedBox(width: 8),
                         const Text(
                           'Usage Log:',
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black,
                           ),
                         ),
                       ],
@@ -204,10 +177,7 @@ class InventoryDetailsScreen extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(vertical: 4),
                             child: Text(
                               '${_formatDate(log.date)} - ${log.description}',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey,
-                              ),
+                              style: const TextStyle(fontSize: 14, color: Colors.grey),
                             ),
                           ),
                           const Divider(color: Colors.grey, thickness: 1),
@@ -218,16 +188,13 @@ class InventoryDetailsScreen extends StatelessWidget {
                         padding: EdgeInsets.symmetric(vertical: 8),
                         child: Text(
                           'No usage history available',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
+                          style: TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                       ),
                     ],
                     const SizedBox(height: 20),
 
-                    // Request More Button
+                    // 🔹 Request More
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -249,17 +216,13 @@ class InventoryDetailsScreen extends StatelessWidget {
                         ),
                         child: const Text(
                           'Request More',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
                     const SizedBox(height: 12),
 
-                    // Added spacing between buttons
+                    // 🔹 Request Log
                     SizedBox(
                       width: double.infinity,
                       child: OutlinedButton(
@@ -286,10 +249,7 @@ class InventoryDetailsScreen extends StatelessWidget {
                             SizedBox(width: 8),
                             Text(
                               'View Request Log',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -302,22 +262,12 @@ class InventoryDetailsScreen extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigation(
-        currentIndex: 0,
-        onTap: (index) {
-          // Handle navigation
-        },
-      ),
     );
   }
 
   String _formatDate(DateTime? date) {
-    if (date == null) return "N/A"; // or "No record", up to you
-    const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
+    if (date == null) return "N/A";
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
-
 }
