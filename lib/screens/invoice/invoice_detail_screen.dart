@@ -28,8 +28,9 @@ class InvoiceDetailScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          Center(child: _sectionTitle(inv.id.toUpperCase()),),
           _kv(
-            'INV-${inv.id.toUpperCase()}',
+            'Invoice Date',
             DateFormat.yMMMMd().format(inv.dateIssued),
           ),
           _kv('Status', inv.approved == true ? 'Approved' : 'Unapproved'),
@@ -49,7 +50,7 @@ class InvoiceDetailScreen extends StatelessWidget {
               _kv('Job Description', view.job?.description ?? ''),
               _kv(
                 'Vehicle',
-                '${view.vehicle?.make ?? ''} ${view.vehicle?.model ?? ''} ${view.vehicle?.year != null ? '• ${view.vehicle!.year}' : ''}',
+                '${view.vehicle?.make ?? ''} ${view.vehicle?.model ?? ''} ${view.vehicle?.year != null ? '(${view.vehicle!.year}) - ${view.vehicle!.id.toUpperCase()}' : ''}',
               ),
               _kv(
                 'Service Date',

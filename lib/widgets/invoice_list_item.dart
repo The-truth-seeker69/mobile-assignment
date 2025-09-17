@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../controller/invoice_controller.dart';
-import '../models/models.dart';
-import '../utils/formatters.dart';
 import '../screens/invoice/invoice_detail_screen.dart';
 import '../services/firestore_service.dart';
 
@@ -17,7 +15,6 @@ class InvoiceListItem extends StatelessWidget {
     final vehicleText =
     '${view.vehicle?.make ?? ''} ${view.vehicle?.model ?? ''}'.trim();
     final isApproved = view.invoice.approved;
-    final isPaid = view.invoice.status == 'paid';
 
     return Card(
       elevation: 0,
@@ -42,7 +39,7 @@ class InvoiceListItem extends StatelessWidget {
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(view.customer?.name ?? 'Unknown', style: const TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 4),
-                Text('${view.invoice.id} • $vehicleText', style: theme.textTheme.bodySmall),
+                Text('${view.vehicle!.id.toUpperCase()} • $vehicleText', style: theme.textTheme.bodySmall),
                 const SizedBox(height: 4),
               ]),
             ),
@@ -64,13 +61,4 @@ class InvoiceListItem extends StatelessWidget {
     );
   }
 
-  Widget _pill(BuildContext context, String text, Color color) => Container(
-    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-    decoration: BoxDecoration(
-      color: color.withOpacity(.12),
-      borderRadius: BorderRadius.circular(12),
-      border: Border.all(color: color.withOpacity(.4)),
-    ),
-    child: Text(text, style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w600)),
-  );
 }

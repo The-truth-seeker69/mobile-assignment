@@ -14,7 +14,7 @@ class EmailService {
     final message = Message()
       ..from = Address('weiquan9487@gmail.com', 'AutoFix Garage')
       ..recipients.add(to)
-      ..subject = 'Car Repair Invoice'
+      ..subject = 'Vehicle Repair Invoice'
       ..text = 'Hello,\n\nPlease find attached your invoice.\n\nThank you!'
       ..attachments = [
         StreamAttachment(

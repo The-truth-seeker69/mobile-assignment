@@ -13,6 +13,13 @@
       "email": "sarah@example.com",
       "address": "45 Jalan Bukit, Penang",
       "vehicles": ["veh002", "veh003"]
+    },
+    "cust003": {
+      "name": "Michael Wong",
+      "phone": "+60135557788",
+      "email": "michael@example.com",
+      "address": "88 Jalan Ampang, Kuala Lumpur",
+      "vehicles": ["veh004"]
     }
   },
 
@@ -37,6 +44,13 @@
       "model": "Myvi",
       "year": 2022,
       "vin": "MY99887LMNOP345"
+    },
+    "veh004": {
+      "customerId": "cust003",
+      "make": "Proton",
+      "model": "X70",
+      "year": 2021,
+      "vin": "PT55678QWER1234"
     }
   },
 
@@ -49,6 +63,11 @@
     "mech002": {
       "name": "James Tan",
       "specialization": "Brake Systems",
+      "availability": true
+    },
+    "mech003": {
+      "name": "Ravi Kumar",
+      "specialization": "Air-Conditioning",
       "availability": true
     }
   },
@@ -67,6 +86,13 @@
       "stockQuantity": 25,
       "reorderLevel": 5,
       "unitPrice": 120.0
+    },
+    "part003": {
+      "partName": "Air Filter",
+      "partNumber": "AF-303",
+      "stockQuantity": 18,
+      "reorderLevel": 5,
+      "unitPrice": 60.0
     }
   },
 
@@ -88,6 +114,24 @@
       "completionDate": "2025-09-12",
       "description": "Engine oil change",
       "partsUsed": ["part002"]
+    },
+    "job003": {
+      "vehicleId": "veh004",
+      "mechanicId": "mech003",
+      "status": "completed",
+      "scheduledDate": "2024-08-20",
+      "completionDate": "2024-08-21",
+      "description": "Air filter replacement",
+      "partsUsed": ["part003"]
+    },
+    "job004": {
+      "vehicleId": "veh002",
+      "mechanicId": "mech001",
+      "status": "completed",
+      "scheduledDate": "2024-12-05",
+      "completionDate": "2024-12-06",
+      "description": "Engine tuning and inspection",
+      "partsUsed": []
     }
   },
 
@@ -103,6 +147,42 @@
       "totalAmount": 220.0,
       "status": "paid",
       "paymentDate": "2025-09-13"
+    },
+    "inv002": {
+      "jobId": "job003",
+      "customerId": "cust003",
+      "dateIssued": "2024-08-21",
+      "items": [
+        { "description": "Air Filter", "quantity": 1, "price": 60.0 },
+        { "description": "Labor", "quantity": 1, "price": 80.0 }
+      ],
+      "totalAmount": 140.0,
+      "status": "paid",
+      "paymentDate": "2024-08-22"
+    },
+    "inv003": {
+      "jobId": "job004",
+      "customerId": "cust002",
+      "dateIssued": "2024-12-06",
+      "items": [
+        { "description": "Engine Tuning", "quantity": 1, "price": 200.0 },
+        { "description": "Labor", "quantity": 1, "price": 150.0 }
+      ],
+      "totalAmount": 350.0,
+      "status": "unpaid",
+      "paymentDate": null
+    },
+    "inv004": {
+      "jobId": "job001",
+      "customerId": "cust001",
+      "dateIssued": "2025-09-16",
+      "items": [
+        { "description": "Brake Pad", "quantity": 1, "price": 80.0 },
+        { "description": "Labor", "quantity": 1, "price": 120.0 }
+      ],
+      "totalAmount": 200.0,
+      "status": "unpaid",
+      "paymentDate": null
     }
   }
 }
