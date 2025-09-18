@@ -90,42 +90,95 @@
 
   "jobs": {
     "job001": {
+      "customerId": "cust001",
       "vehicleId": "veh001",
       "mechanicId": "mech002",
       "status": "assigned",
       "scheduledDate": "2025-09-15",
+      "scheduledTime": "10:30",
       "completionDate": null,
       "description": "Brake pad replacement",
-      "partsUsed": ["part001"]
+      "partsUsed": ["IT009"]
     },
     "job002": {
+      "customerId": "cust002",
       "vehicleId": "veh003",
       "mechanicId": "mech001",
       "status": "completed",
       "scheduledDate": "2025-09-10",
+      "scheduledTime": "14:00",
       "completionDate": "2025-09-12",
       "description": "Engine oil change",
-      "partsUsed": ["part002"]
+      "partsUsed": ["IT009"]
     },
     "job003": {
+      "customerId": "cust003",
       "vehicleId": "veh004",
       "mechanicId": "mech003",
       "status": "completed",
       "scheduledDate": "2024-08-20",
+      "scheduledTime": "09:00",
       "completionDate": "2024-08-21",
       "description": "Air filter replacement",
-      "partsUsed": ["part003"]
+      "partsUsed": ["IT009"]
     },
     "job004": {
+      "customerId": "cust002",
       "vehicleId": "veh002",
       "mechanicId": "mech001",
       "status": "completed",
       "scheduledDate": "2024-12-05",
+      "scheduledTime": "11:00",
       "completionDate": "2024-12-06",
       "description": "Engine tuning and inspection",
-      "partsUsed": []
+      "partsUsed": ["IT009"]
+    },
+    "job005": {
+      "customerId": "cust001",
+      "vehicleId": "veh001",
+      "mechanicId": "mech003",
+      "status": "assigned",
+      "scheduledDate": "2025-09-20",
+      "scheduledTime": "15:00",
+      "completionDate": null,
+      "description": "Air conditioning service",
+      "partsUsed": ["IT009"]
+    },
+    "job006": {
+      "customerId": "cust002",
+      "vehicleId": "veh002",
+      "mechanicId": "mech002",
+      "status": "pending",
+      "scheduledDate": "2025-09-22",
+      "scheduledTime": "13:30",
+      "completionDate": null,
+      "description": "Brake inspection",
+      "partsUsed": ["IT009"]
+    },
+    "job007": {
+      "customerId": "cust003",
+      "vehicleId": "veh004",
+      "mechanicId": "mech001",
+      "status": "completed",
+      "scheduledDate": "2025-08-01",
+      "scheduledTime": "16:00",
+      "completionDate": "2025-08-02",
+      "description": "Engine diagnostics",
+      "partsUsed": ["IT009"]
+    },
+    "job008": {
+      "customerId": "cust002",
+      "vehicleId": "veh003",
+      "mechanicId": "mech002",
+      "status": "assigned",
+      "scheduledDate": "2025-10-01",
+      "scheduledTime": "10:00",
+      "completionDate": null,
+      "description": "Brake pad replacement",
+      "partsUsed": ["IT009"]
     }
-  },
+  }
+,
 
   "invoices": {
     "inv001": {

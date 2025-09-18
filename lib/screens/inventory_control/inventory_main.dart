@@ -1,19 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../models/inventory_item.dart';
-import '../../widgets/bottom_navigation.dart';
 import 'inventory_details.dart';
 import 'add_inventory.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import "../../utils/file_helper.dart";
 
 Future<File?> getInventoryImage(String? filename) async {
   if (filename == null || filename.isEmpty) return null;
+
+  // If it's an asset, return null (we'll handle in UI)
+  if (filename.startsWith("assets/")) return null;
+
+  // Otherwise look inside documents directory
   final appDir = await getApplicationDocumentsDirectory();
   final fullPath = '${appDir.path}/$filename';
   final file = File(fullPath);
   if (await file.exists()) return file;
+
   return null;
 }
 
@@ -67,27 +71,33 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         decoration: InputDecoration(
                           hintText: 'Search by item name, category, supplier',
                           hintStyle: const TextStyle(color: Colors.grey),
-                          prefixIcon:
-                          const Icon(Icons.search, color: Colors.grey),
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            color: Colors.grey,
+                          ),
                           border: InputBorder.none,
-                          contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 16),
-                          suffixIcon: _selectedCategory != null &&
-                              _selectedCategory != "all"
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                          ),
+                          suffixIcon:
+                              _selectedCategory != null &&
+                                  _selectedCategory != "all"
                               ? Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Chip(
-                              label: Text(
-                                _selectedCategory!,
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                              deleteIcon:
-                              const Icon(Icons.close, size: 16),
-                              onDeleted: () {
-                                setState(() => _selectedCategory = "all");
-                              },
-                            ),
-                          )
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Chip(
+                                    label: Text(
+                                      _selectedCategory!,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                    deleteIcon: const Icon(
+                                      Icons.close,
+                                      size: 16,
+                                    ),
+                                    onDeleted: () {
+                                      setState(() => _selectedCategory = "all");
+                                    },
+                                  ),
+                                )
                               : null,
                         ),
                       ),
@@ -103,10 +113,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const Icon(
-                        Icons.filter_list,
-                        color: Colors.grey,
-                      ),
+                      child: const Icon(Icons.filter_list, color: Colors.grey),
                     ),
                   ),
                 ],
@@ -116,20 +123,21 @@ class _InventoryScreenState extends State<InventoryScreen> {
             // 📦 Inventory List
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 80), // leave space for FAB
+                padding: const EdgeInsets.only(bottom: 80),
+                // leave space for FAB
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
                       .collection('inventory')
                       .snapshots(),
                   builder: (context, snapshot) {
-                    if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     }
 
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                       return const Center(
-                          child: Text("No inventory items found"));
+                        child: Text("No inventory items found"),
+                      );
                     }
 
                     final items = snapshot.data!.docs.map((doc) {
@@ -160,15 +168,16 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     if (_selectedCategory != null &&
                         _selectedCategory != "all") {
                       filtered = filtered
-                          .where((item) =>
-                      item.category.toLowerCase() ==
-                          _selectedCategory!.toLowerCase())
+                          .where(
+                            (item) =>
+                                item.category.toLowerCase() ==
+                                _selectedCategory!.toLowerCase(),
+                          )
                           .toList();
                     }
 
                     return ListView.builder(
-                      padding:
-                      const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                       itemCount: filtered.length,
                       itemBuilder: (context, index) {
                         return _buildInventoryCard(filtered[index]);
@@ -205,15 +214,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
           ),
           child: const Text(
             'Add Inventory',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
       ),
-      floatingActionButtonLocation:
-      FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
@@ -231,7 +236,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           "Suspension",
           "Body",
           "Interior",
-          "Other"
+          "Other",
         ];
         return SafeArea(
           child: Expanded(
@@ -261,8 +266,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ),
           ),
         );
-
-
       },
     );
   }
@@ -292,28 +295,37 @@ class _InventoryScreenState extends State<InventoryScreen> {
               color: Colors.grey[200],
               borderRadius: BorderRadius.circular(8),
             ),
-            child: FutureBuilder<File?>(
-              future: getInventoryImage(item.imagePath),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                }
-                if (snapshot.hasData && snapshot.data != null) {
-                  return Image.file(
-                    snapshot.data!,
+
+            child: item.imagePath.startsWith("assets/")
+                ? Image.asset(
+                    item.imagePath,
                     width: 50,
                     height: 50,
                     fit: BoxFit.cover,
-                  );
-                }
-                return const Icon(
-                  Icons.inventory_2,
-                  color: Colors.grey,
-                  size: 30,
-                );
-              },
-            ),
+                  )
+                : FutureBuilder<File?>(
+                    future: getInventoryImage(item.imagePath),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        );
+                      }
+                      if (snapshot.hasData && snapshot.data != null) {
+                        return Image.file(
+                          snapshot.data!,
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                        );
+                      }
+                      return const Icon(
+                        Icons.inventory_2,
+                        color: Colors.grey,
+                        size: 30,
+                      );
+                    },
+                  ),
           ),
           const SizedBox(width: 16),
 
@@ -333,10 +345,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 const SizedBox(height: 4),
                 Text(
                   'Qty: ${item.quantity}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
                 ),
                 if (item.isLowStock) ...[
                   const SizedBox(height: 4),
@@ -372,8 +381,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.grey[200],
               foregroundColor: Colors.black,
-              padding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(6),
               ),

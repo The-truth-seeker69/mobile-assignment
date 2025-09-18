@@ -91,12 +91,6 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
   Future<void> _saveItem() async {
     if (!_formKey.currentState!.validate()) return;
 
-    // Check if image is selected
-    if (_selectedImage == null) {
-      _showErrorDialog('Missing Image', 'Please choose an image before saving.');
-      return;
-    }
-
     setState(() {
       _isSaving = true;
     });
@@ -117,21 +111,22 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
         newId = "IT${nextNum.toString().padLeft(3, '0')}";
       }
 
-      // Try to save image locally (but proceed even if it fails)
-      String? imagePath;
-      try {
-        imagePath = await _saveImageLocally(_selectedImage!, newId);
-      } catch (e) {
-        print("⚠️ Image saving failed but proceeding: $e");
-        // We'll continue without the image path
+      // Save image
+      String imagePath;
+      if (_selectedImage != null) {
+        // Save picked image locally, only store filename
+        final savedFileName = await _saveImageLocally(_selectedImage!, newId);
+        imagePath = savedFileName ?? '';
+      } else {
+        // fallback → asset path (you can choose a default for each category)
+        imagePath = "assets/images/default.png";
       }
 
       // Save to Firestore
       await FirebaseFirestore.instance.collection('inventory').doc(newId).set({
         'itemID': newId,
         'category': _selectedCategory,
-        'imagePath': imagePath ?? '',
-        // This might be null if saving failed
+        'imagePath': imagePath,
         'isLowStock': int.parse(_quantityController.text.trim()) <= 5,
         'lastRefill': null,
         'name': _itemNameController.text.trim(),
