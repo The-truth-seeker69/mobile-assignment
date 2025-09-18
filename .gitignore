@@ -48,3 +48,4 @@ app.*.map.json
 /lib/db/serviceAccountKey.json
 /android/app/google-services.json
 firebase.json
+/lib/firebase_options.dart
