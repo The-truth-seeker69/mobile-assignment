@@ -206,53 +206,43 @@
   "mechanics": {
     "mech001": {
       "name": "Ali Bin Omar",
-      "specialization": "Engine Repair",
-      "availability": true
+      "specialization": "Engine Repair"
     },
     "mech002": {
       "name": "James Tan",
-      "specialization": "Brake Systems",
-      "availability": true
+      "specialization": "Brake Systems"
     },
     "mech003": {
       "name": "James",
-      "specialization": "Brake Systems",
-      "availability": true
+      "specialization": "Brake Systems"
     },
     "mech004": {
       "name": "Zain",
-      "specialization": "Air Conditioning",
-      "availability": true
+      "specialization": "Air Conditioning"
     },
     "mech005": {
       "name": "Daniel Lee",
-      "specialization": "Suspension & Steering",
-      "availability": false
+      "specialization": "Suspension & Steering"
     },
     "mech006": {
       "name": "Siti Aisyah",
-      "specialization": "Electrical Systems",
-      "availability": true
+      "specialization": "Electrical Systems"
     },
     "mech007": {
       "name": "Arif Hassan",
-      "specialization": "Wheel Alignment",
-      "availability": true
+      "specialization": "Wheel Alignment"
     },
     "mech008": {
       "name": "Mei Ling",
-      "specialization": "Tire & Wheel Services",
-      "availability": false
+      "specialization": "Tire & Wheel Services"
     },
     "mech009": {
       "name": "Rahul Kumar",
-      "specialization": "Exhaust Systems",
-      "availability": true
+      "specialization": "Exhaust Systems"
     },
     "mech010": {
       "name": "Fatimah Yusuf",
-      "specialization": "Battery & Charging",
-      "availability": true
+      "specialization": "Battery & Charging"
     }
   },
   "inventory": {
