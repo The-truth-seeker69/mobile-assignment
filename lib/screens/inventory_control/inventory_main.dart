@@ -239,36 +239,35 @@ class _InventoryScreenState extends State<InventoryScreen> {
           "Other",
         ];
         return SafeArea(
-          child: Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: categories.map((cat) {
-                return ListTile(
-                  title: Text(
-                    cat[0].toUpperCase() + cat.substring(1),
-                    style: TextStyle(
-                      fontWeight: _selectedCategory == cat
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                    ),
+          child: ListView(
+            shrinkWrap: true, // ✅ only take needed height
+            children: categories.map((cat) {
+              return ListTile(
+                title: Text(
+                  cat[0].toUpperCase() + cat.substring(1),
+                  style: TextStyle(
+                    fontWeight: _selectedCategory == cat
+                        ? FontWeight.bold
+                        : FontWeight.normal,
                   ),
-                  trailing: _selectedCategory == cat
-                      ? const Icon(Icons.check, color: Colors.blue)
-                      : null,
-                  onTap: () {
-                    setState(() {
-                      _selectedCategory = cat;
-                    });
-                    Navigator.pop(context);
-                  },
-                );
-              }).toList(),
-            ),
+                ),
+                trailing: _selectedCategory == cat
+                    ? const Icon(Icons.check, color: Colors.blue)
+                    : null,
+                onTap: () {
+                  setState(() {
+                    _selectedCategory = cat;
+                  });
+                  Navigator.pop(context);
+                },
+              );
+            }).toList(),
           ),
         );
       },
     );
   }
+
 
   Widget _buildInventoryCard(InventoryItem item) {
     return Container(

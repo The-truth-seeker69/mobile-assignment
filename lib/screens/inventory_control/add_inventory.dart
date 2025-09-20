@@ -119,7 +119,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
         imagePath = savedFileName ?? '';
       } else {
         // fallback → asset path (you can choose a default for each category)
-        imagePath = "assets/images/default.png";
+        imagePath = "assets/Inv/default.png";
       }
 
       // Save to Firestore
