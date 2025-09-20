@@ -100,9 +100,9 @@ class FirestoreCrmService {
     return StreamZip<List<Job>>(streams).map((lists) => lists.expand((e) => e).toList());
   }
 
-  /// Chat collections: chats/{customerId}/messages/documents/items/{messageId}
+  /// Chat collections: chats/{customerId}/messages/documents/{messageId}
   CollectionReference<Map<String, dynamic>> _chatMessages(String customerId) =>
-      _db.collection('chats').doc(customerId).collection('messages').doc('documents');
+      _db.collection('chats').doc(customerId).collection('messages').doc('documents').collection('items');
 
   Stream<List<Map<String, dynamic>>> streamChatMessages(String customerId) {
     return _chatMessages(customerId)
@@ -127,18 +127,22 @@ class FirestoreCrmService {
   Future<void> sendAttachmentMessage({
     required String customerId,
     required String sender,
-    required String url,
+    required String localPath, // Changed from url to localPath
     required String fileName,
     required String mimeType,
     String messageType = 'file', // 'image' | 'file'
   }) async {
     await _chatMessages(customerId).add({
       'type': messageType,
-      'url': url,
+      'localPath': localPath, // Store local file path instead of URL
       'fileName': fileName,
       'mimeType': mimeType,
       'sender': sender,
       'timestamp': FieldValue.serverTimestamp(),
     });
+  }
+
+  Future<void> deleteMessage(String customerId, String messageId) async {
+    await _chatMessages(customerId).doc(messageId).delete();
   }
 }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../models/models.dart';
-import '../../models/mechanic.dart';
 import '../../services/firestore_vehicle_service.dart';
 import '../../utils/formatters.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../crm/chat_screen.dart';
 
 class VehicleDetailScreen extends StatefulWidget {
   final Vehicle vehicle;
@@ -79,9 +79,27 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            Text('${v.make} ${v.model} ${v.year}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-            Text('Plate No: ${v.plateNo}', style: const TextStyle(color: Colors.black87)),
-            Text('VIN: ${v.vin}', style: const TextStyle(color: Colors.black87)),
+            Text('${v.make} ${v.model} ${v.year}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 8),
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(color: Colors.black87, fontSize: 16),
+                children: [
+                  const TextSpan(text: 'Plate No: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: v.plateNo),
+                ],
+              ),
+            ),
+            const SizedBox(height: 4),
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(color: Colors.black87, fontSize: 16),
+                children: [
+                  const TextSpan(text: 'VIN: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: v.vin),
+                ],
+              ),
+            ),
             const SizedBox(height: 16),
             const Text('Owner Details', style: TextStyle(fontWeight: FontWeight.w700)),
             const SizedBox(height: 8),
@@ -91,14 +109,34 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.person, color: Colors.black54),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: _buildAvatar(_customer?.imagePath, 40),
+                  ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Owner: ${_customer?.name ?? '-'}'),
-                        Text('Phone No: ${_customer?.phone ?? '-'}'),
+                        RichText(
+                          text: TextSpan(
+                            style: const TextStyle(color: Colors.black87, fontSize: 16),
+                            children: [
+                              const TextSpan(text: 'Owner: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                              TextSpan(text: _customer?.name ?? '-'),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        RichText(
+                          text: TextSpan(
+                            style: const TextStyle(color: Colors.black87, fontSize: 16),
+                            children: [
+                              const TextSpan(text: 'Phone No: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                              TextSpan(text: _customer?.phone ?? '-'),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -108,7 +146,10 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                       child: const Icon(Icons.phone, size: 18),
                     ),
                     const SizedBox(width: 12),
-                    const Icon(Icons.message, size: 18),
+                    InkWell(
+                      onTap: () => _openChat(),
+                      child: const Icon(Icons.message, size: 18),
+                    ),
                   ])
                 ],
               ),
@@ -207,6 +248,34 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
       );
     }
   }
+
+  Future<void> _openChat() async {
+    if (_customer == null) return;
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ChatScreen(
+          customerId: _customer!.id,
+          customerName: _customer!.name,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAvatar(String? path, double size) {
+    final assetPath = path != null && path.isNotEmpty ? 'assets/images/crm/$path' : '';
+    return Container(
+      width: size,
+      height: size,
+      color: const Color(0xffe6e6e6),
+      child: assetPath.isEmpty
+          ? const Icon(Icons.person, color: Colors.grey)
+          : Image.asset(
+              assetPath,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => const Icon(Icons.person, color: Colors.grey),
+            ),
+    );
+  }
 }
 
 class _JobTile extends StatelessWidget {
@@ -216,21 +285,89 @@ class _JobTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 4),
-        Text(job.description, style: const TextStyle(color: Colors.black87)),
-        const SizedBox(height: 2),
-        Text('Mechanic: ${mechanic?.name ?? '-'} | Mileage: ${job.mileage?.toStringAsFixed(0) ?? '-'} km', style: const TextStyle(color: Colors.black54)),
-        const SizedBox(height: 2),
-        Text('Scheduled: ' + (job.scheduledDate != null ? dateDmy.format(job.scheduledDate!) : '-'), style: const TextStyle(color: Colors.black54)),
-        const SizedBox(height: 2),
-        Text('Completed: ' + (job.completionDate != null ? dateDmy.format(job.completionDate!) : '-'), style: const TextStyle(color: Colors.black54)),
-        const SizedBox(height: 2),
-        Text('Notes: ${job.notes ?? '-'}', style: const TextStyle(color: Colors.black54)),
-        const Divider(height: 20),
-      ],
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            job.description,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                    style: const TextStyle(color: Colors.black54, fontSize: 14),
+                    children: [
+                      const TextSpan(text: 'Mechanic: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: mechanic?.name ?? '-'),
+                    ],
+                  ),
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  style: const TextStyle(color: Colors.black54, fontSize: 14),
+                  children: [
+                    const TextSpan(text: 'Mileage: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: '${job.mileage?.toStringAsFixed(0) ?? '-'} km'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Row(
+            children: [
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                    style: const TextStyle(color: Colors.black54, fontSize: 14),
+                    children: [
+                      const TextSpan(text: 'Scheduled: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(text: job.scheduledDate != null ? dateDmy.format(job.scheduledDate!) : '-'),
+                    ],
+                  ),
+                ),
+              ),
+              RichText(
+                text: TextSpan(
+                  style: const TextStyle(color: Colors.black54, fontSize: 14),
+                  children: [
+                    const TextSpan(text: 'Completed: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: job.completionDate != null ? dateDmy.format(job.completionDate!) : '-'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          if (job.notes != null && job.notes!.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            RichText(
+              text: TextSpan(
+                style: const TextStyle(color: Colors.black54, fontSize: 14),
+                children: [
+                  const TextSpan(text: 'Notes: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: job.notes!),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
     );
   }
 }

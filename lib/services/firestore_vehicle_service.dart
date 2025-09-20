@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import '../models/models.dart';
-import '../models/mechanic.dart';
 
 class FirestoreVehicleService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;

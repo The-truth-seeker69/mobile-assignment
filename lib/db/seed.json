@@ -5,21 +5,14 @@
       "phone": "+60123456789",
       "imagePath": "alvin.jpg",
       "email": "ngjw-wm22@student.tarc.edu.my",
-      "address": "123 Main St, Kuala Lumpur",
-      "vehicles": [
-        "veh001"
-      ]
+      "address": "123 Main St, Kuala Lumpur"
     },
     "cust002": {
       "name": "Sarah Lee",
       "phone": "+60119876543",
       "email": "sarah@example.com",
       "imagePath": "jack.jpg",
-      "address": "45 Jalan Bukit, Penang",
-      "vehicles": [
-        "veh002",
-        "veh003"
-      ]
+      "address": "45 Jalan Bukit, Penang"
     }
   },
   "vehicles": {
@@ -88,9 +81,7 @@
       "scheduledDate": "2025-09-15",
       "completionDate": null,
       "description": "Brake pad replacement",
-      "partsUsed": [
-        "part001"
-      ]
+      "partsUsed": ["part001"]
     },
     "job002": {
       "vehicleId": "veh003",
@@ -154,27 +145,65 @@
     "cust001": {
       "messages": {
         "documents": {
-          "T5VpetQaXAIwbp8hW51H": {
-            "type": "text",
-            "text": "Hello John, your vehicle is ready for pickup.",
-            "sender": "staff",
-            "timestamp": "2025-09-18T12:00:00Z"
-          },
-          "V66g69ZvDiriUFkfgwhE": {
-            "type": "image",
-            "url": "https://firebasestorage.googleapis.com/chat/cust001/work_done.jpg",
-            "fileName": "work_done.jpg",
-            "mimeType": "image/jpeg",
-            "sender": "staff",
-            "timestamp": "2025-09-18T12:05:00Z"
-          },
-          "jo1tRmMydqKxD1VVSVH4": {
-            "type": "file",
-            "url": "https://firebasestorage.googleapis.com/chat/cust001/invoice-inv001.pdf",
-            "fileName": "invoice-inv001.pdf",
-            "mimeType": "application/pdf",
-            "sender": "staff",
-            "timestamp": "2025-09-18T12:06:00Z"
+          "items": {
+            "T5VpetQaXAIwbp8hW51H": {
+              "type": "text",
+              "text": "Hello John, your vehicle is ready for pickup.",
+              "sender": "staff",
+              "timestamp": "2025-09-18T12:00:00Z"
+            },
+            "cust001_msg1": {
+              "type": "text",
+              "text": "Thank you! What time can I come by?",
+              "sender": "customer",
+              "timestamp": "2025-09-18T12:02:00Z"
+            },
+            "cust001_msg2": {
+              "type": "text",
+              "text": "You can come anytime between 9 AM to 6 PM today. We're open until 7 PM.",
+              "sender": "staff",
+              "timestamp": "2025-09-18T12:03:00Z"
+            },
+            "V66g69ZvDiriUFkfgwhE": {
+              "type": "image",
+              "localPath": "/assets/images/crm/alvin.jpg",
+              "fileName": "alvin.jpg",
+              "mimeType": "image/jpeg",
+              "sender": "staff",
+              "timestamp": "2025-09-18T12:05:00Z"
+            },
+            "cust001_msg3": {
+              "type": "text",
+              "text": "Here's a photo of the completed work on your Toyota Corolla.",
+              "sender": "staff",
+              "timestamp": "2025-09-18T12:05:30Z"
+            },
+            "jo1tRmMydqKxD1VVSVH4": {
+              "type": "file",
+              "localPath": "/data/user/0/com.example.assignment/app_flutter/chat_attachments/cust001/invoice-inv001.pdf",
+              "fileName": "invoice-inv001.pdf",
+              "mimeType": "application/pdf",
+              "sender": "staff",
+              "timestamp": "2025-09-18T12:06:00Z"
+            },
+            "cust001_msg4": {
+              "type": "text",
+              "text": "Perfect! I'll be there around 3 PM. Thanks for the quick service!",
+              "sender": "customer",
+              "timestamp": "2025-09-18T12:10:00Z"
+            },
+            "cust001_msg5": {
+              "type": "text",
+              "text": "Hi John, just wanted to follow up on your recent service. How is your Toyota Corolla running?",
+              "sender": "staff",
+              "timestamp": "2025-09-19T09:00:00Z"
+            },
+            "cust001_msg6": {
+              "type": "text",
+              "text": "It's running great! The brake pads feel much better now. Thanks for the excellent work!",
+              "sender": "customer",
+              "timestamp": "2025-09-19T09:15:00Z"
+            }
           }
         }
       }
@@ -182,11 +211,63 @@
     "cust002": {
       "messages": {
         "documents": {
-          "msg001": {
-            "type": "text",
-            "text": "Hi Sarah, we replaced your brake pads as requested.",
-            "sender": "staff",
-            "timestamp": "2025-09-18T13:00:00Z"
+          "items": {
+            "cust002_msg1": {
+              "type": "text",
+              "text": "Hi Sarah, we replaced your brake pads as requested.",
+              "sender": "staff",
+              "timestamp": "2025-09-18T13:00:00Z"
+            },
+            "cust002_msg2": {
+              "type": "text",
+              "text": "Great! How much will it cost?",
+              "sender": "customer",
+              "timestamp": "2025-09-18T13:02:00Z"
+            },
+            "cust002_msg3": {
+              "type": "text",
+              "text": "The total cost is RM 220. This includes the brake pads and labor. I'll send you the detailed invoice.",
+              "sender": "staff",
+              "timestamp": "2025-09-18T13:03:00Z"
+            },
+            "cust002_msg4": {
+              "type": "file",
+              "localPath": "/data/user/0/com.example.assignment/app_flutter/chat_attachments/cust002/invoice-brake-service.pdf",
+              "fileName": "invoice-brake-service.pdf",
+              "mimeType": "application/pdf",
+              "sender": "staff",
+              "timestamp": "2025-09-18T13:04:00Z"
+            },
+            "cust002_msg5": {
+              "type": "text",
+              "text": "That sounds reasonable. When can I pick up my Honda Civic?",
+              "sender": "customer",
+              "timestamp": "2025-09-18T13:05:00Z"
+            },
+            "cust002_msg6": {
+              "type": "text",
+              "text": "Your Honda Civic will be ready tomorrow morning. We'll call you when it's done.",
+              "sender": "staff",
+              "timestamp": "2025-09-18T13:06:00Z"
+            },
+            "cust002_msg7": {
+              "type": "text",
+              "text": "Sarah, your Honda Civic is ready for pickup! The engine oil change is complete.",
+              "sender": "staff",
+              "timestamp": "2025-09-19T08:30:00Z"
+            },
+            "cust002_msg8": {
+              "type": "text",
+              "text": "Perfect! I'll come by this afternoon. What time do you close?",
+              "sender": "customer",
+              "timestamp": "2025-09-19T08:45:00Z"
+            },
+            "cust002_msg9": {
+              "type": "text",
+              "text": "We close at 7 PM. You can come anytime before that. See you soon!",
+              "sender": "staff",
+              "timestamp": "2025-09-19T08:46:00Z"
+            }
           }
         }
       }

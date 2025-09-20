@@ -11,17 +11,20 @@ class Mechanic {
     required this.availability,
   });
 
-  factory Mechanic.fromMap(String id, Map<String, dynamic> data) => Mechanic(
-    id: id,
-    name: data['name'] ?? '',
-    specialization: data['specialization'] ?? '',
-    availability: data['availability'] == true,
-  );
+  factory Mechanic.fromMap(String id, Map<String, dynamic> data) {
+    return Mechanic(
+      id: id,
+      name: data['name'] ?? '',
+      specialization: data['specialization'] ?? '',
+      availability: data['availability'] ?? false,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'specialization': specialization,
+      'availability': availability,
+    };
+  }
 }
-
-
-
-
-
-
-

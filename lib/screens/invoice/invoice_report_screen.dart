@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
-import 'package:fl_chart/fl_chart.dart'; // ✅ Add this
+import 'package:fl_chart/fl_chart.dart';
 import '../../controller/invoice_controller.dart';
 import '../../utils/formatters.dart';
 import '../../utils/pdf_generator.dart';

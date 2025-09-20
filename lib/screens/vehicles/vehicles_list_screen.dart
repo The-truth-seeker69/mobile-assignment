@@ -79,7 +79,7 @@ class _VehiclesListScreenState extends State<VehiclesListScreen> {
                       child: Padding(
                         padding: EdgeInsets.all(16),
                         child: Text(
-                          'No vehicles found.\n\nChecks:\n- Collection: vehicles\n- Read rules allow this user\n- Fields: customerId, make, model, year, vin',
+                          'No vehicles found.\n\n',
                           textAlign: TextAlign.center,
                         ),
                       ),
