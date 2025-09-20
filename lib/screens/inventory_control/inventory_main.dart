@@ -298,7 +298,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             child: item.imagePath.startsWith("assets/")
                 ? Image.asset(
                     item.imagePath,
-                    width: 50,
+                    width: 70,
                     height: 50,
                     fit: BoxFit.cover,
                   )
