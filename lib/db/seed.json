@@ -4,18 +4,24 @@
       "name": "John Doe",
       "phone": "+60123456789",
       "email": "john@example.com",
+      "imagePath": "alvin.jpg",
       "address": "123 Main St, Kuala Lumpur",
-      "vehicles": ["veh001"]
+      "vehicles": [
+        "veh001"
+      ]
     },
     "cust002": {
       "name": "Sarah Lee",
       "phone": "+60119876543",
       "email": "sarah@example.com",
+      "imagePath": "jack.jpg",
       "address": "45 Jalan Bukit, Penang",
-      "vehicles": ["veh002", "veh003"]
+      "vehicles": [
+        "veh002",
+        "veh003"
+      ]
     }
   },
-
   "vehicles": {
     "veh001": {
       "customerId": "cust001",
@@ -39,7 +45,6 @@
       "vin": "MY99887LMNOP345"
     }
   },
-
   "mechanics": {
     "mech001": {
       "name": "Ali Bin Omar",
@@ -52,7 +57,6 @@
       "availability": true
     }
   },
-
   "inventory": {
     "part001": {
       "partName": "Brake Pad",
@@ -69,7 +73,6 @@
       "unitPrice": 120.0
     }
   },
-
   "jobs": {
     "job001": {
       "vehicleId": "veh001",
@@ -78,7 +81,9 @@
       "scheduledDate": "2025-09-15",
       "completionDate": null,
       "description": "Brake pad replacement",
-      "partsUsed": ["part001"]
+      "partsUsed": [
+        "part001"
+      ]
     },
     "job002": {
       "vehicleId": "veh003",
@@ -87,22 +92,73 @@
       "scheduledDate": "2025-09-10",
       "completionDate": "2025-09-12",
       "description": "Engine oil change",
-      "partsUsed": ["part002"]
+      "partsUsed": [
+        "part002"
+      ]
     }
   },
-
   "invoices": {
     "inv001": {
       "jobId": "job002",
       "customerId": "cust002",
       "dateIssued": "2025-09-12",
       "items": [
-        { "description": "Engine Oil 4L", "quantity": 1, "price": 120.0 },
-        { "description": "Labor", "quantity": 1, "price": 100.0 }
+        {
+          "description": "Engine Oil 4L",
+          "quantity": 1,
+          "price": 120.0
+        },
+        {
+          "description": "Labor",
+          "quantity": 1,
+          "price": 100.0
+        }
       ],
       "totalAmount": 220.0,
       "status": "paid",
       "paymentDate": "2025-09-13"
+    }
+  },
+  "chats": {
+    "cust001": {
+      "messages": {
+        "documents": {
+          "T5VpetQaXAIwbp8hW51H": {
+            "type": "text",
+            "text": "Hello John, your vehicle is ready for pickup.",
+            "sender": "staff",
+            "timestamp": "2025-09-18T12:00:00Z"
+          },
+          "V66g69ZvDiriUFkfgwhE": {
+            "type": "image",
+            "url": "https://firebasestorage.googleapis.com/chat/cust001/work_done.jpg",
+            "fileName": "work_done.jpg",
+            "mimeType": "image/jpeg",
+            "sender": "staff",
+            "timestamp": "2025-09-18T12:05:00Z"
+          },
+          "jo1tRmMydqKxD1VVSVH4": {
+            "type": "file",
+            "url": "https://firebasestorage.googleapis.com/chat/cust001/invoice-inv001.pdf",
+            "fileName": "invoice-inv001.pdf",
+            "mimeType": "application/pdf",
+            "sender": "staff",
+            "timestamp": "2025-09-18T12:06:00Z"
+          }
+        }
+      }
+    },
+    "cust002": {
+      "messages": {
+        "documents": {
+          "msg001": {
+            "type": "text",
+            "text": "Hi Sarah, we replaced your brake pads as requested.",
+            "sender": "staff",
+            "timestamp": "2025-09-18T13:00:00Z"
+          }
+        }
+      }
     }
   }
 }
