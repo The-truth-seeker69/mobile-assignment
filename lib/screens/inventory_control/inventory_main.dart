@@ -1,10 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../models/inventory_item.dart';
-import '../../widgets/bottom_navigation.dart';
 import 'inventory_details.dart';
 import 'add_inventory.dart';
 import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+
+Future<File?> getInventoryImage(String? filename) async {
+  if (filename == null || filename.isEmpty) return null;
+
+  // If it's an asset, return null (we'll handle in UI)
+  if (filename.startsWith("assets/")) return null;
+
+  // Otherwise look inside documents directory
+  final appDir = await getApplicationDocumentsDirectory();
+  final fullPath = '${appDir.path}/$filename';
+  final file = File(fullPath);
+  if (await file.exists()) return file;
+
+  return null;
+}
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
@@ -15,6 +30,7 @@ class InventoryScreen extends StatefulWidget {
 
 class _InventoryScreenState extends State<InventoryScreen> {
   final TextEditingController _searchController = TextEditingController();
+  String? _selectedCategory = "all"; // default
 
   @override
   Widget build(BuildContext context) {
@@ -33,101 +49,146 @@ class _InventoryScreenState extends State<InventoryScreen> {
         ),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          // 🔍 Search bar
-          Container(
-            padding: const EdgeInsets.all(16),
-            color: Colors.white,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: TextField(
-                      controller: _searchController,
-                      onChanged: (_) => setState(() {}), // re-run filter
-                      decoration: const InputDecoration(
-                        hintText: 'Search by item name, category, supplier',
-                        hintStyle: TextStyle(color: Colors.grey),
-                        prefixIcon: Icon(Icons.search, color: Colors.grey),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 16),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // 🔍 Search + Filter Row
+            Container(
+              padding: const EdgeInsets.all(16),
+              color: Colors.white,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: TextField(
+                        controller: _searchController,
+                        onChanged: (_) => setState(() {}),
+                        decoration: InputDecoration(
+                          hintText: 'Search by item name, category, supplier',
+                          hintStyle: const TextStyle(color: Colors.grey),
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            color: Colors.grey,
+                          ),
+                          border: InputBorder.none,
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                          ),
+                          suffixIcon:
+                              _selectedCategory != null &&
+                                  _selectedCategory != "all"
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Chip(
+                                    label: Text(
+                                      _selectedCategory!,
+                                      style: const TextStyle(fontSize: 12),
+                                    ),
+                                    deleteIcon: const Icon(
+                                      Icons.close,
+                                      size: 16,
+                                    ),
+                                    onDeleted: () {
+                                      setState(() => _selectedCategory = "all");
+                                    },
+                                  ),
+                                )
+                              : null,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(20),
+                  const SizedBox(width: 12),
+                  GestureDetector(
+                    onTap: () => _showCategoryFilter(context),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: const Icon(Icons.filter_list, color: Colors.grey),
+                    ),
                   ),
-                  child: const Icon(
-                    Icons.filter_list,
-                    color: Colors.grey,
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
 
-          // 📦 Inventory List from Firestore
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('inventory').snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+            // 📦 Inventory List
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 80),
+                // leave space for FAB
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: FirebaseFirestore.instance
+                      .collection('inventory')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(child: Text("No inventory items found"));
-                }
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return const Center(
+                        child: Text("No inventory items found"),
+                      );
+                    }
 
-                // 🔄 Convert Firestore docs into InventoryItem
-                final items = snapshot.data!.docs.map((doc) {
-                  final data = doc.data() as Map<String, dynamic>;
-                  return InventoryItem(
-                    id: doc.id,
-                    name: data['name'] ?? '',
-                    quantity: data['quantity'] ?? 0,
-                    category: data['category'] ?? '',
-                    supplier: data['supplier'] ?? '',
-                    imagePath: data['imagePath'] ?? '',
-                    isLowStock: data['isLowStock'] ?? false,
-                    lastRefill: data['lastRefill'] != null
-                        ? (data['lastRefill'] as Timestamp).toDate()
-                        : null,
-                    usageLog: [], // we’ll wire this later
-                  );
-                }).toList();
+                    final items = snapshot.data!.docs.map((doc) {
+                      final data = doc.data() as Map<String, dynamic>;
+                      return InventoryItem(
+                        id: doc.id,
+                        name: data['name'] ?? '',
+                        quantity: data['quantity'] ?? 0,
+                        category: data['category'] ?? '',
+                        supplier: data['supplier'] ?? '',
+                        imagePath: data['imagePath'] ?? '',
+                        isLowStock: data['isLowStock'] ?? false,
+                        lastRefill: data['lastRefill'] != null
+                            ? (data['lastRefill'] as Timestamp).toDate()
+                            : null,
+                        usageLog: [],
+                      );
+                    }).toList();
 
-                // 🔍 Filtering
-                final query = _searchController.text.toLowerCase();
-                final filtered = items.where((item) {
-                  return item.name.toLowerCase().contains(query) ||
-                      item.category.toLowerCase().contains(query) ||
-                      item.supplier.toLowerCase().contains(query);
-                }).toList();
+                    // 🔍 Filtering
+                    final query = _searchController.text.toLowerCase();
+                    List<InventoryItem> filtered = items.where((item) {
+                      return item.name.toLowerCase().contains(query) ||
+                          item.category.toLowerCase().contains(query) ||
+                          item.supplier.toLowerCase().contains(query);
+                    }).toList();
 
-                return ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: filtered.length,
-                  itemBuilder: (context, index) {
-                    return _buildInventoryCard(filtered[index]);
+                    if (_selectedCategory != null &&
+                        _selectedCategory != "all") {
+                      filtered = filtered
+                          .where(
+                            (item) =>
+                                item.category.toLowerCase() ==
+                                _selectedCategory!.toLowerCase(),
+                          )
+                          .toList();
+                    }
+
+                    return ListView.builder(
+                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                      itemCount: filtered.length,
+                      itemBuilder: (context, index) {
+                        return _buildInventoryCard(filtered[index]);
+                      },
+                    );
                   },
-                );
-              },
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
 
       // ➕ Add Inventory button
@@ -153,16 +214,60 @@ class _InventoryScreenState extends State<InventoryScreen> {
           ),
           child: const Text(
             'Add Inventory',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
+
+  /// 🔹 Show category filter modal
+  void _showCategoryFilter(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (_) {
+        final categories = [
+          "All",
+          "Brake",
+          "Engine",
+          "Transmission",
+          "Electrical",
+          "Suspension",
+          "Body",
+          "Interior",
+          "Other",
+        ];
+        return SafeArea(
+          child: ListView(
+            shrinkWrap: true, // ✅ only take needed height
+            children: categories.map((cat) {
+              return ListTile(
+                title: Text(
+                  cat[0].toUpperCase() + cat.substring(1),
+                  style: TextStyle(
+                    fontWeight: _selectedCategory == cat
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                  ),
+                ),
+                trailing: _selectedCategory == cat
+                    ? const Icon(Icons.check, color: Colors.blue)
+                    : null,
+                onTap: () {
+                  setState(() {
+                    _selectedCategory = cat;
+                  });
+                  Navigator.pop(context);
+                },
+              );
+            }).toList(),
+          ),
+        );
+      },
+    );
+  }
+
 
   Widget _buildInventoryCard(InventoryItem item) {
     return Container(
@@ -190,16 +295,36 @@ class _InventoryScreenState extends State<InventoryScreen> {
               borderRadius: BorderRadius.circular(8),
             ),
 
-        child: item.imagePath.isNotEmpty
-            ? Image.file(
-          File(item.imagePath),
-          fit: BoxFit.cover,
-        )
-            : const Icon(
-          Icons.inventory_2,
-          color: Colors.grey,
-          size: 30,
-        ),
+            child: item.imagePath.startsWith("assets/")
+                ? Image.asset(
+                    item.imagePath,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  )
+                : FutureBuilder<File?>(
+                    future: getInventoryImage(item.imagePath),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        );
+                      }
+                      if (snapshot.hasData && snapshot.data != null) {
+                        return Image.file(
+                          snapshot.data!,
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                        );
+                      }
+                      return const Icon(
+                        Icons.inventory_2,
+                        color: Colors.grey,
+                        size: 30,
+                      );
+                    },
+                  ),
           ),
           const SizedBox(width: 16),
 
@@ -219,22 +344,15 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 const SizedBox(height: 4),
                 Text(
                   'Qty: ${item.quantity}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
+                  style: const TextStyle(fontSize: 14, color: Colors.grey),
                 ),
                 if (item.isLowStock) ...[
                   const SizedBox(height: 4),
                   Row(
-                    children: [
-                      const Icon(
-                        Icons.warning,
-                        color: Colors.red,
-                        size: 16,
-                      ),
-                      const SizedBox(width: 4),
-                      const Text(
+                    children: const [
+                      Icon(Icons.warning, color: Colors.red, size: 16),
+                      SizedBox(width: 4),
+                      Text(
                         'Low Stock',
                         style: TextStyle(
                           fontSize: 12,

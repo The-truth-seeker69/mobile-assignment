@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -73,42 +71,25 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
     }
   }
 
-  /// Get application directory with fallback
-  Future<Directory> _getAppDirectory() async {
-    try {
-      return await getApplicationDocumentsDirectory();
-    } catch (e) {
-      print("❌ Error getting app directory: $e");
-      // Fallback to temporary directory
-      return Directory.systemTemp;
-    }
-  }
+
 
   /// Save image to local storage with improved error handling
+  /// Save image to local storage and return only filename
   Future<String?> _saveImageLocally(File image, String itemId) async {
     try {
-      final appDocDir = await _getAppDirectory();
-      final fileName =
-          '${DateTime.now().millisecondsSinceEpoch}_$itemId${p.extension(image.path)}';
+      final appDocDir = await getApplicationDocumentsDirectory();
+      final fileName = "$itemId${p.extension(image.path)}"; // e.g., IT001.png
       final savedImage = await image.copy('${appDocDir.path}/$fileName');
-
-      print("✅ Image saved at: ${savedImage.path}");
-      return savedImage.path;
+      return fileName; // ✅ only store filename
     } catch (e) {
-      print("❌ Error saving image locally: $e");
-      // If local saving fails, we'll still proceed without the image path
+      debugPrint("Error saving image locally: $e");
       return null;
     }
   }
 
+
   Future<void> _saveItem() async {
     if (!_formKey.currentState!.validate()) return;
-
-    // Check if image is selected
-    if (_selectedImage == null) {
-      _showErrorDialog('Missing Image', 'Please choose an image before saving.');
-      return;
-    }
 
     setState(() {
       _isSaving = true;
@@ -130,20 +111,22 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
         newId = "IT${nextNum.toString().padLeft(3, '0')}";
       }
 
-      // Try to save image locally (but proceed even if it fails)
-      String? imagePath;
-      try {
-        imagePath = await _saveImageLocally(_selectedImage!, newId);
-      } catch (e) {
-        print("⚠️ Image saving failed but proceeding: $e");
-        // We'll continue without the image path
+      // Save image
+      String imagePath;
+      if (_selectedImage != null) {
+        // Save picked image locally, only store filename
+        final savedFileName = await _saveImageLocally(_selectedImage!, newId);
+        imagePath = savedFileName ?? '';
+      } else {
+        // fallback → asset path (you can choose a default for each category)
+        imagePath = "assets/Inv/default.png";
       }
 
       // Save to Firestore
       await FirebaseFirestore.instance.collection('inventory').doc(newId).set({
         'itemID': newId,
         'category': _selectedCategory,
-        'imagePath': imagePath, // This might be null if saving failed
+        'imagePath': imagePath,
         'isLowStock': int.parse(_quantityController.text.trim()) <= 5,
         'lastRefill': null,
         'name': _itemNameController.text.trim(),
@@ -311,9 +294,14 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 label: 'Item Name',
                 controller: _itemNameController,
                 hintText: 'Enter name',
-                validator: (value) => value == null || value.isEmpty
-                    ? 'Please enter item name'
-                    : null,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter item name';
+                  }
+                  // Regex: only letters and spaces allowed
+
+                  return null;
+                },
               ),
               const SizedBox(height: 16),
 
@@ -324,11 +312,11 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 hintText: 'Enter quantity',
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null || value.trim().isEmpty) {
                     return 'Please enter quantity';
                   }
-                  if (int.tryParse(value) == null) {
-                    return 'Please enter a valid number';
+                  if (int.tryParse(value.trim()) == null) {
+                    return 'Quantity must be a valid integer';
                   }
                   return null;
                 },
@@ -340,10 +328,21 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 label: 'Supplier Name',
                 controller: _supplierController,
                 hintText: 'Enter Supplier Name',
-                validator: (value) => value == null || value.isEmpty
-                    ? 'Please enter supplier name'
-                    : null,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter supplier name';
+                  }
+                  // Must contain at least 1 letter
+                  if (!RegExp(r'^[A-Za-z0-9 ]+$').hasMatch(value.trim())) {
+                    return 'Supplier name can only contain letters, numbers, and spaces';
+                  }
+                  if (!RegExp(r'[A-Za-z]').hasMatch(value.trim())) {
+                    return 'Supplier name must include at least one letter';
+                  }
+                  return null;
+                },
               ),
+
               const SizedBox(height: 16),
 
               // Category Dropdown

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../models/inventory_item.dart';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RequestLogScreen extends StatefulWidget {
   final InventoryItem item;

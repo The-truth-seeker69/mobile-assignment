@@ -3,6 +3,7 @@ import '../widgets/bottom_navigation.dart';
 import 'screens/inventory_control/inventory_main.dart';
 import 'screens/invoice/invoice_list_screen.dart';
 import 'screens/vehicles/vehicles_list_screen.dart';
+import 'screens/work_scheduler/work.dart';
 import 'screens/crm/crm_list_screen.dart';
 // import your other modules here
 
@@ -18,7 +19,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
 
   final List<Widget> _pages = const [
     InventoryScreen(),
-    Placeholder(), // SchedulerScreen()
+    WorkScheduleScreen(), // SchedulerScreen()
     VehiclesListScreen(),
     InvoicesListScreen(),
     CrmListScreen(),
