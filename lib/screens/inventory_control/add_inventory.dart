@@ -294,9 +294,16 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 label: 'Item Name',
                 controller: _itemNameController,
                 hintText: 'Enter name',
-                validator: (value) => value == null || value.isEmpty
-                    ? 'Please enter item name'
-                    : null,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter item name';
+                  }
+                  // Regex: only letters and spaces allowed
+                  if (!RegExp(r'^[A-Za-z ]+$').hasMatch(value.trim())) {
+                    return 'Item name can only contain letters and spaces';
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 16),
 
@@ -307,11 +314,11 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 hintText: 'Enter quantity',
                 keyboardType: TextInputType.number,
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null || value.trim().isEmpty) {
                     return 'Please enter quantity';
                   }
-                  if (int.tryParse(value) == null) {
-                    return 'Please enter a valid number';
+                  if (int.tryParse(value.trim()) == null) {
+                    return 'Quantity must be a valid integer';
                   }
                   return null;
                 },
@@ -323,10 +330,21 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 label: 'Supplier Name',
                 controller: _supplierController,
                 hintText: 'Enter Supplier Name',
-                validator: (value) => value == null || value.isEmpty
-                    ? 'Please enter supplier name'
-                    : null,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Please enter supplier name';
+                  }
+                  // Must contain at least 1 letter
+                  if (!RegExp(r'^[A-Za-z0-9 ]+$').hasMatch(value.trim())) {
+                    return 'Supplier name can only contain letters, numbers, and spaces';
+                  }
+                  if (!RegExp(r'[A-Za-z]').hasMatch(value.trim())) {
+                    return 'Supplier name must include at least one letter';
+                  }
+                  return null;
+                },
               ),
+
               const SizedBox(height: 16),
 
               // Category Dropdown

@@ -3,7 +3,7 @@
     "cust001": {
       "name": "John Doe",
       "phone": "+60123456789",
-      "email": "john@example.com",
+      "email": "ngjw-wm22@student.tarc.edu.my",
       "address": "123 Main St, Kuala Lumpur",
       "vehicles": ["veh001"]
     },
@@ -13,13 +13,6 @@
       "email": "sarah@example.com",
       "address": "45 Jalan Bukit, Penang",
       "vehicles": ["veh002", "veh003"]
-    },
-    "cust003": {
-      "name": "Michael Wong",
-      "phone": "+60135557788",
-      "email": "michael@example.com",
-      "address": "88 Jalan Ampang, Kuala Lumpur",
-      "vehicles": ["veh004"]
     }
   },
 
@@ -44,13 +37,6 @@
       "model": "Myvi",
       "year": 2022,
       "vin": "MY99887LMNOP345"
-    },
-    "veh004": {
-      "customerId": "cust003",
-      "make": "Proton",
-      "model": "X70",
-      "year": 2021,
-      "vin": "PT55678QWER1234"
     }
   },
 
@@ -63,11 +49,6 @@
     "mech002": {
       "name": "James Tan",
       "specialization": "Brake Systems",
-      "availability": true
-    },
-    "mech003": {
-      "name": "Ravi Kumar",
-      "specialization": "Air-Conditioning",
       "availability": true
     }
   },
