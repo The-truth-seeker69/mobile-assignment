@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/bottom_navigation.dart';
+import 'widgets/bottom_navigation.dart';
 import 'screens/inventory_control/inventory_main.dart';
 import 'screens/invoice/invoice_list_screen.dart';
 import 'screens/work_scheduler/work.dart';

@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.example.assignment"
-    compileSdk = 36
+    compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -21,8 +21,10 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.toString()
     }
+    compileSdk = 35  // or your existing compileSdk
 
     defaultConfig {
+<<<<<<< HEAD
 <<<<<<< HEAD
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.assignment"
@@ -39,7 +41,19 @@ android {
         versionCode = 1
         versionName = "1.0"
 >>>>>>> 8d36ccf199c7253c979fcc5ec2d5715e434537d5
+=======
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId = "com.example.assignment"
+
+        // You can update the following values to match your application needs.
+        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        minSdk = 23
+        targetSdk = 34
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+>>>>>>> 40998ab58f363366c1c675161b9793f58c426903
     }
+    ndkVersion = "27.0.12077973" // ← add this line
 
     buildTypes {
         release {

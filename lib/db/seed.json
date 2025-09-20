@@ -3,9 +3,12 @@
     "cust001": {
       "name": "John Doe",
       "phone": "+60123456789",
-      "email": "john@example.com",
+      "imagePath": "alvin.jpg",
+      "email": "ngjw-wm22@student.tarc.edu.my",
       "address": "123 Main St, Kuala Lumpur",
-      "vehicles": ["veh001"]
+      "vehicles": [
+        "veh001"
+      ]
     },
     "cust002": {
       "name": "Sarah Lee",
@@ -13,99 +16,17 @@
       "email": "sarah@example.com",
       "imagePath": "jack.jpg",
       "address": "45 Jalan Bukit, Penang",
-      "vehicles": ["veh002", "veh003"]
-    },
-  "cust003": {
-    "name": "Ali Hassan",
-    "phone": "+60135551234",
-    "email": "ali.hassan@example.com",
-    "address": "8 Jalan Ampang, Kuala Lumpur",
-    "vehicles": ["veh004"]
+      "vehicles": [
+        "veh002",
+        "veh003"
+      ]
+    }
   },
-  "cust004": {
-    "name": "Mei Ling Tan",
-    "phone": "+60178901234",
-    "email": "meiling.tan@example.com",
-    "address": "22 Persiaran Gurney, Penang",
-    "vehicles": ["veh005", "veh006"]
-  },
-  "cust005": {
-    "name": "Raj Kumar",
-    "phone": "+60123459876",
-    "email": "raj.kumar@example.com",
-    "address": "15 Jalan Tun Razak, Kuala Lumpur",
-    "vehicles": ["veh007"]
-  },
-  "cust006": {
-    "name": "Nora Ahmad",
-    "phone": "+60175554321",
-    "email": "nora.ahmad@example.com",
-    "address": "88 Jalan Sutera, Johor Bahru",
-    "vehicles": ["veh008"]
-  },
-  "cust007": {
-    "name": "James Wong",
-    "phone": "+60196667788",
-    "email": "james.wong@example.com",
-    "address": "5 Jalan Pudu, Kuala Lumpur",
-    "vehicles": ["veh009", "veh010"]
-  },
-  "cust008": {
-    "name": "Aisyah Binti Omar",
-    "phone": "+60134561234",
-    "email": "aisyah.omar@example.com",
-    "address": "12 Jalan Bukit Bintang, Kuala Lumpur",
-    "vehicles": ["veh011"]
-  },
-  "cust009": {
-    "name": "Michael Chan",
-    "phone": "+60187776655",
-    "email": "michael.chan@example.com",
-    "address": "31 Lebuh Pantai, George Town",
-    "vehicles": ["veh012"]
-  },
-  "cust010": {
-    "name": "Siti Mariam",
-    "phone": "+60142345678",
-    "email": "siti.mariam@example.com",
-    "address": "72 Jalan Merdeka, Melaka",
-    "vehicles": ["veh013", "veh014"]
-  },
-  "cust011": {
-    "name": "Daniel Lim",
-    "phone": "+60131239876",
-    "email": "daniel.lim@example.com",
-    "address": "9 Jalan Petaling, Kuala Lumpur",
-    "vehicles": ["veh015"]
-  },
-  "cust012": {
-    "name": "Farah Zain",
-    "phone": "+60153334444",
-    "email": "farah.zain@example.com",
-    "address": "14 Jalan Kempas, Johor Bahru",
-    "vehicles": ["veh016"]
-  },
-  "cust013": {
-    "name": "Henry Tan",
-    "phone": "+60164445566",
-    "email": "henry.tan@example.com",
-    "address": "6 Jalan Gaya, Kota Kinabalu",
-    "vehicles": ["veh017", "veh018"]
-  },
-  "cust014": {
-    "name": "Chong Wei",
-    "phone": "+60175556677",
-    "email": "chong.wei@example.com",
-    "address": "20 Jalan Iskandar, Ipoh",
-    "vehicles": ["veh019"]
-  }
-},
   "vehicles": {
     "veh001": {
       "customerId": "cust001",
       "make": "Toyota",
       "model": "Corolla",
-      "plateNumber": "JNS1203",
       "year": 2020,
       "vin": "JT12345ABC67890"
     },
@@ -113,7 +34,6 @@
       "customerId": "cust002",
       "make": "Honda",
       "model": "Civic",
-      "plateNumber": "JPS1203",
       "year": 2019,
       "vin": "HN54321XYZ12345"
     },
@@ -121,12 +41,10 @@
       "customerId": "cust002",
       "make": "Perodua",
       "model": "Myvi",
-      "plateNumber": "ABC1",
       "year": 2022,
       "vin": "MY99887LMNOP345"
     }
   },
-
   "mechanics": {
     "mech001": {
       "name": "Ali Bin Omar",
@@ -180,21 +98,98 @@
     }
   },
   "inventory": {
-    "IT002": {
+    "IT001": {
       "category": "Brake",
       "createdAt": "16 September 2025 at 14:11:22 UTC+8",
-      "imagePath": "/data/user/0/com.example.assignment/code_cache/1758003076044_IT002.jpg",
+      "imagePath": "IT001.jpg",
       "isLowStock": true,
-      "itemID": "IT002",
+      "itemID": "IT001",
       "lastRefill": null,
       "name": "Brake Pad",
       "quantity": 5,
       "remarks": "brake",
-      "supplier": "toyota",
+      "supplier": "Toyota",
+      "usageLog": []
+    },
+    "IT002": {
+      "category": "Engine",
+      "createdAt": "17 September 2025 at 10:00:00 UTC+8",
+      "imagePath": "IT002.jpg",
+      "isLowStock": false,
+      "itemID": "IT002",
+      "lastRefill": null,
+      "name": "Engine Oil Filter",
+      "quantity": 12,
+      "remarks": "filter",
+      "supplier": "Honda",
+      "usageLog": []
+    },
+    "IT003": {
+      "category": "Transmission",
+      "createdAt": "17 September 2025 at 10:05:00 UTC+8",
+      "imagePath": "IT003.jpg",
+      "isLowStock": false,
+      "itemID": "IT003",
+      "lastRefill": null,
+      "name": "Clutch Plate",
+      "quantity": 7,
+      "remarks": "manual transmission",
+      "supplier": "Mazda",
+      "usageLog": []
+    },
+    "IT004": {
+      "category": "Electrical",
+      "createdAt": "17 September 2025 at 10:10:00 UTC+8",
+      "imagePath": "IT004.jpg",
+      "isLowStock": false,
+      "itemID": "IT004",
+      "lastRefill": null,
+      "name": "Car Battery",
+      "quantity": 9,
+      "remarks": "12V battery",
+      "supplier": "Bosch",
+      "usageLog": []
+    },
+    "IT005": {
+      "category": "Suspension",
+      "createdAt": "17 September 2025 at 10:15:00 UTC+8",
+      "imagePath": "IT005.jpg",
+      "isLowStock": true,
+      "itemID": "IT005",
+      "lastRefill": null,
+      "name": "Shock Absorber",
+      "quantity": 3,
+      "remarks": "rear suspension",
+      "supplier": "Perodua",
+      "usageLog": []
+    },
+    "IT006": {
+      "category": "Body",
+      "createdAt": "17 September 2025 at 10:20:00 UTC+8",
+      "imagePath": "IT006.jpg",
+      "isLowStock": false,
+      "itemID": "IT006",
+      "lastRefill": null,
+      "name": "Front Bumper",
+      "quantity": 6,
+      "remarks": "plastic body part",
+      "supplier": "Proton",
+      "usageLog": []
+    },
+    "IT007": {
+      "category": "Interior",
+      "createdAt": "17 September 2025 at 10:25:00 UTC+8",
+      "imagePath": "IT007.jpg",
+      "isLowStock": false,
+      "itemID": "IT007",
+      "lastRefill": null,
+      "name": "Car Seat Cover",
+      "quantity": 15,
+      "remarks": "leather cover",
+      "supplier": "Universal",
       "usageLog": []
     }
   },
-
   "jobs": {
     "job001": {
       "customerId": "cust001",
@@ -205,9 +200,7 @@
       "scheduledTime": "10:30",
       "completionDate": null,
       "description": "Brake pad replacement",
-      "partsUsed": [
-        "part001"
-      ]
+      "partsUsed": []
     },
     "job002": {
       "customerId": "cust002",
@@ -218,7 +211,10 @@
       "scheduledTime": "09:00",
       "completionDate": null,
       "description": "Engine oil change and filter replacement",
-      "partsUsed": ["part002", "part003"]
+      "partsUsed": [
+        "IT005",
+        "IT007"
+      ]
     },
     "job003": {
       "customerId": "cust003",
@@ -229,7 +225,7 @@
       "scheduledTime": "09:00",
       "completionDate": null,
       "description": "Transmission fluid service",
-      "partsUsed": ["part004"]
+      "partsUsed": []
     },
     "job004": {
       "customerId": "cust004",
@@ -240,7 +236,9 @@
       "scheduledTime": "11:30",
       "completionDate": "2025-09-12",
       "description": "Battery replacement",
-      "partsUsed": ["part005"]
+      "partsUsed": [
+        "IT002"
+      ]
     },
     "job005": {
       "customerId": "cust005",
@@ -251,7 +249,9 @@
       "scheduledTime": "16:00",
       "completionDate": null,
       "description": "Brake rotor resurfacing",
-      "partsUsed": ["part006"]
+      "partsUsed": [
+        "IT003"
+      ]
     },
     "job006": {
       "customerId": "cust006",
@@ -262,7 +262,9 @@
       "scheduledTime": "13:15",
       "completionDate": null,
       "description": "Wheel alignment and balancing",
-      "partsUsed": []
+      "partsUsed": [
+        "IT002"
+      ]
     },
     "job007": {
       "customerId": "cust007",
@@ -273,7 +275,10 @@
       "scheduledTime": "10:00",
       "completionDate": null,
       "description": "Suspension strut replacement",
-      "partsUsed": ["part007", "part008"]
+      "partsUsed": [
+        "IT005",
+        "IT002"
+      ]
     },
     "job008": {
       "customerId": "cust008",
@@ -284,7 +289,10 @@
       "scheduledTime": "09:30",
       "completionDate": "2025-09-13",
       "description": "Tire replacement (4 tires)",
-      "partsUsed": ["part009", "part010", "part011", "part012"]
+      "partsUsed": [
+        "IT002",
+        "IT001"
+      ]
     },
     "job009": {
       "customerId": "cust009",
@@ -295,7 +303,9 @@
       "scheduledTime": "10:00",
       "completionDate": null,
       "description": "Exhaust muffler repair",
-      "partsUsed": ["part013"]
+      "partsUsed": [
+        "IT002"
+      ]
     },
     "job010": {
       "customerId": "cust010",
@@ -306,7 +316,10 @@
       "scheduledTime": "10:01",
       "completionDate": null,
       "description": "Headlight assembly replacement",
-      "partsUsed": ["part014", "part015"]
+      "partsUsed": [
+        "IT001",
+        "IT003"
+      ]
     },
     "job011": {
       "customerId": "cust011",
@@ -317,7 +330,9 @@
       "scheduledTime": "08:00",
       "completionDate": null,
       "description": "Brake fluid flush",
-      "partsUsed": ["part016"]
+      "partsUsed": [
+        "IT006"
+      ]
     },
     "job012": {
       "customerId": "cust012",
@@ -328,7 +343,10 @@
       "scheduledTime": "14:45",
       "completionDate": null,
       "description": "Air conditioning system recharge",
-      "partsUsed": ["part017", "part018"]
+      "partsUsed": [
+        "IT005",
+        "IT004"
+      ]
     },
     "job013": {
       "customerId": "cust013",
@@ -339,7 +357,9 @@
       "scheduledTime": "12:30",
       "completionDate": null,
       "description": "Starter motor replacement",
-      "partsUsed": ["part019"]
+      "partsUsed": [
+        "IT001"
+      ]
     },
     "job014": {
       "customerId": "cust013",
@@ -347,85 +367,145 @@
       "mechanicId": "mech001",
       "status": "completed",
       "scheduledDate": "2025-09-10",
-      "scheduledTime": "12:30",
+      "scheduledTime": "14:00",
       "completionDate": "2025-09-12",
       "description": "Engine oil change",
-      "partsUsed": ["part002"]
-    }
-  },
-
-  "invoices": {
-    "inv001": {
-      "jobId": "job002",
-      "customerId": "cust002",
-      "dateIssued": "2025-09-12",
-      "items": [
-        {
-          "description": "Engine Oil 4L",
-          "quantity": 1,
-          "price": 120.0
-        },
-        {
-          "description": "Labor",
-          "quantity": 1,
-          "price": 100.0
-        }
-      ],
-      "totalAmount": 220.0,
-      "status": "paid",
-      "paymentDate": "2025-09-13"
-    }
-  },
-
-  "requests": {
-    "RQ001": {
-      "itemId": "IT002",
-      "quantity": 3,
-      "notes": "Needed urgently for upcoming job"
+      "partsUsed": [
+        "IT004"
+      ]
     },
-    "RQ002": {
-      "itemId": "IT002",
-      "quantity": 1,
-      "notes": "Stock check replacement"
-    }
-  },
-  "chats": {
-    "cust001": {
-      "messages": {
-        "documents": {
-          "T5VpetQaXAIwbp8hW51H": {
-            "type": "text",
-            "text": "Hello John, your vehicle is ready for pickup.",
-            "sender": "staff",
-            "timestamp": "2025-09-18T12:00:00Z"
+    "invoices": {
+      "inv001": {
+        "jobId": "job002",
+        "customerId": "cust002",
+        "dateIssued": "2025-09-12",
+        "items": [
+          {
+            "description": "Engine Oil 4L",
+            "quantity": 1,
+            "price": 120.0
           },
-          "V66g69ZvDiriUFkfgwhE": {
-            "type": "image",
-            "url": "https://firebasestorage.googleapis.com/chat/cust001/work_done.jpg",
-            "fileName": "work_done.jpg",
-            "mimeType": "image/jpeg",
-            "sender": "staff",
-            "timestamp": "2025-09-18T12:05:00Z"
-          },
-          "jo1tRmMydqKxD1VVSVH4": {
-            "type": "file",
-            "url": "https://firebasestorage.googleapis.com/chat/cust001/invoice-inv001.pdf",
-            "fileName": "invoice-inv001.pdf",
-            "mimeType": "application/pdf",
-            "sender": "staff",
-            "timestamp": "2025-09-18T12:06:00Z"
+          {
+            "description": "Labor",
+            "quantity": 1,
+            "price": 100.0
           }
-        }
+        ],
+        "totalAmount": 220.0,
+        "status": "paid",
+        "paymentDate": "2025-09-13"
+      },
+      "inv002": {
+        "jobId": "job003",
+        "customerId": "cust003",
+        "dateIssued": "2024-08-21",
+        "items": [
+          {
+            "description": "Air Filter",
+            "quantity": 1,
+            "price": 60.0
+          },
+          {
+            "description": "Labor",
+            "quantity": 1,
+            "price": 80.0
+          }
+        ],
+        "totalAmount": 140.0,
+        "status": "paid",
+        "paymentDate": "2024-08-22"
+      },
+      "inv003": {
+        "jobId": "job004",
+        "customerId": "cust002",
+        "dateIssued": "2024-12-06",
+        "items": [
+          {
+            "description": "Engine Tuning",
+            "quantity": 1,
+            "price": 200.0
+          },
+          {
+            "description": "Labor",
+            "quantity": 1,
+            "price": 150.0
+          }
+        ],
+        "totalAmount": 350.0,
+        "status": "unpaid",
+        "paymentDate": null
+      },
+      "inv004": {
+        "jobId": "job001",
+        "customerId": "cust001",
+        "dateIssued": "2025-09-16",
+        "items": [
+          {
+            "description": "Brake Pad",
+            "quantity": 1,
+            "price": 80.0
+          },
+          {
+            "description": "Labor",
+            "quantity": 1,
+            "price": 120.0
+          }
+        ],
+        "totalAmount": 200.0,
+        "status": "unpaid",
+        "paymentDate": null
       }
     },
-    "cust002": {
-      "messages": {
-        "documents": {
-          "msg001": {
-            "type": "text",
-            "text": "Hi Sarah, we replaced your brake pads as requested.",
-            "sender": "staff",
-            "timestamp": "2025-09-18T13:00:00Z"
+    "requests": {
+      "RQ001": {
+        "itemId": "IT002",
+        "quantity": 3,
+        "notes": "Needed urgently for upcoming job"
+      },
+      "RQ002": {
+        "itemId": "IT002",
+        "quantity": 1,
+        "notes": "Stock check replacement"
+      }
+    },
+    "chats": {
+      "cust001": {
+        "messages": {
+          "documents": {
+            "T5VpetQaXAIwbp8hW51H": {
+              "type": "text",
+              "text": "Hello John, your vehicle is ready for pickup.",
+              "sender": "staff",
+              "timestamp": "2025-09-18T12:00:00Z"
+            },
+            "V66g69ZvDiriUFkfgwhE": {
+              "type": "image",
+              "url": "https://firebasestorage.googleapis.com/chat/cust001/work_done.jpg",
+              "fileName": "work_done.jpg",
+              "mimeType": "image/jpeg",
+              "sender": "staff",
+              "timestamp": "2025-09-18T12:05:00Z"
+            },
+            "jo1tRmMydqKxD1VVSVH4": {
+              "type": "file",
+              "url": "https://firebasestorage.googleapis.com/chat/cust001/invoice-inv001.pdf",
+              "fileName": "invoice-inv001.pdf",
+              "mimeType": "application/pdf",
+              "sender": "staff",
+              "timestamp": "2025-09-18T12:06:00Z"
+            }
+          }
+        }
+      },
+      "cust002": {
+        "messages": {
+          "documents": {
+            "msg001": {
+              "type": "text",
+              "text": "Hi Sarah, we replaced your brake pads as requested.",
+              "sender": "staff",
+              "timestamp": "2025-09-18T13:00:00Z"
+            }
           }
         }
       }

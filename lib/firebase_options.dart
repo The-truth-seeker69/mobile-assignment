@@ -85,5 +85,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'greenstem-f1f65.firebasestorage.app',
     measurementId: 'G-78807DPDSE',
   );
-
 }

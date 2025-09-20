@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../models/inventory_item.dart';
-import '../../widgets/bottom_navigation.dart';
 import 'item_request_screen.dart';
+import 'request_log.dart';
+import '../../utils/file_helper.dart';
 import 'dart:io';
-import 'request_log.dart'; // Import the request log screen
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class InventoryDetailsScreen extends StatelessWidget {
   final InventoryItem item;
@@ -51,39 +52,63 @@ class InventoryDetailsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Title
-                    const Text(
-                      'Item Details',
-                      style: TextStyle(
+                    Text(
+                      item.name,
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 8),
-
+                    Text(
+                      'ID: ${item.id}',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
                     const SizedBox(height: 20),
 
                     // Item Image
                     Container(
                       width: double.infinity,
-                      height: 320,
+                      height: 300,
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(8),
                       ),
-
-                        child: item.imagePath.isNotEmpty
-                            ? Image.file(
-                          File(item.imagePath),
-                          fit: BoxFit.cover,
-                        )
-                            : const Icon(
+                      child: item.imagePath.startsWith("assets/")
+                        ? ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(
+                        item.imagePath,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                        : FutureBuilder<File?>(
+                      future: getInventoryImage(item.imagePath),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                        if (snapshot.hasData && snapshot.data != null) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.file(
+                              snapshot.data!,
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        }
+                        return const Icon(
                           Icons.inventory_2,
                           color: Colors.grey,
-                          size: 30,
-                        )
+                          size: 50,
+                        );
+                      },
                     ),
+
+    ),
                     const SizedBox(height: 20),
 
                     // Item Information Section
@@ -97,22 +122,14 @@ class InventoryDetailsScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-
-                          const SizedBox(height: 8),
                           Text(
                             'Category: ${item.category}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
+                            style: const TextStyle(fontSize: 14, color: Colors.grey),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             'Supplier: ${item.supplier}',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                            ),
+                            style: const TextStyle(fontSize: 14, color: Colors.grey),
                           ),
                         ],
                       ),
@@ -120,180 +137,267 @@ class InventoryDetailsScreen extends StatelessWidget {
                     const SizedBox(height: 20),
 
                     // Inventory Details Section
-                    Row(
+                    const Row(
                       children: [
-                        const Icon(
-                          Icons.person,
-                          color: Colors.grey,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'Inventory Details',
+                        Icon(Icons.inventory_2, color: Colors.grey, size: 20),
+                        SizedBox(width: 8),
+                        Text(
+                          'Inventory Status',
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black,
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 12),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.check_circle,
-                          color: Colors.green,
-                          size: 16,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'In Stock: ${item.quantity} units',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: item.isLowStock ? Colors.orange[50] : Colors.green[50],
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            item.isLowStock ? Icons.warning : Icons.check_circle,
+                            color: item.isLowStock ? Colors.orange : Colors.green,
+                            size: 24,
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 12),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'In Stock: ${item.quantity} units',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                item.isLowStock ? 'Low Stock Alert!' : 'Stock Level Good',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: item.isLowStock ? Colors.orange[700] : Colors.green[700],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        const Icon(
-                          Icons.update,
-                          color: Colors.grey,
-                          size: 16,
-                        ),
+                        const Icon(Icons.update, color: Colors.grey, size: 16),
                         const SizedBox(width: 8),
                         Text(
                           'Last Refill: ${_formatDate(item.lastRefill)}',
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
+                          style: const TextStyle(fontSize: 14, color: Colors.grey),
                         ),
                       ],
                     ),
                     const SizedBox(height: 20),
 
                     // Usage Log Section
-                    Row(
+                    const Row(
                       children: [
-                        const Icon(
-                          Icons.search,
-                          color: Colors.grey,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 8),
-                        const Text(
-                          'Usage Log:',
+                        Icon(Icons.history, color: Colors.grey, size: 20),
+                        SizedBox(width: 8),
+                        Text(
+                          'Usage History',
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black,
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 12),
-                    const Divider(color: Colors.grey, thickness: 1),
-                    if (item.usageLog.isNotEmpty) ...[
-                      ...item.usageLog.map((log) => Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 4),
-                            child: Text(
-                              '${_formatDate(log.date)} - ${log.description}',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: Colors.grey,
+
+                    StreamBuilder<QuerySnapshot>(
+                      stream: FirebaseFirestore.instance
+                          .collection('jobs')
+                          .where('partsUsed', arrayContains: item.id)
+                          .orderBy('scheduledDate', descending: true)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+
+                        if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        }
+
+                        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                          return Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[50],
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'No usage history available',
+                                style: TextStyle(fontSize: 14, color: Colors.grey),
                               ),
                             ),
-                          ),
-                          const Divider(color: Colors.grey, thickness: 1),
-                        ],
-                      )),
-                    ] else ...[
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          'No usage history available',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                    ],
+                          );
+                        }
+
+                        final jobs = snapshot.data!.docs;
+
+                        return Column(
+                          children: jobs.map((doc) {
+                            final data = doc.data() as Map<String, dynamic>;
+                            final jobId = doc.id;
+
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 8),
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[50],
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: Colors.grey[200]!),
+                              ),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 32,
+                                    height: 32,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.blue,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(
+                                      Icons.build,
+                                      color: Colors.white,
+                                      size: 18,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          data['description'] ?? 'No description',
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          'Job ID: $jobId',
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          'Scheduled: ${data['scheduledDate'] ?? 'N/A'}',
+                                          style: const TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          'Status: ${data['status'] ?? 'Unknown'}',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: _getStatusColor(data['status']),
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      },
+                    ),
                     const SizedBox(height: 20),
 
-                    // Request More Button
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ItemRequestScreen(item: item),
+                    // Action Buttons
+                    Column(
+                      children: [
+                        // Request More Button
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ItemRequestScreen(item: item),
+                                ),
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Text(
-                          'Request More',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-
-                    // Added spacing between buttons
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RequestLogScreen(item: item),
-                            ),
-                          );
-                        },
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          side: const BorderSide(color: Colors.black),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.history, size: 20),
-                            SizedBox(width: 8),
-                            Text(
-                              'View Request Log',
+                            child: const Text(
+                              'Request More',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                        const SizedBox(height: 12),
+
+                        // View Request Log Button
+                        SizedBox(
+                          width: double.infinity,
+                          child: OutlinedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RequestLogScreen(item: item),
+                                ),
+                              );
+                            },
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: Colors.black,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              side: const BorderSide(color: Colors.black),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.history, size: 20),
+                                SizedBox(width: 8),
+                                Text(
+                                  'View Request Log',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -305,13 +409,24 @@ class InventoryDetailsScreen extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime? date) {
-    if (date == null) return "N/A"; // or "No record", up to you
-    const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-    ];
-    return '${date.day} ${months[date.month - 1]} ${date.year}';
+  Color _getStatusColor(String? status) {
+    switch (status?.toLowerCase()) {
+      case 'completed':
+        return Colors.green;
+      case 'in progress':
+        return Colors.blue;
+      case 'assigned':
+        return Colors.orange;
+      case 'cancelled':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
   }
 
+  String _formatDate(DateTime? date) {
+    if (date == null) return "N/A";
+    const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return '${date.day} ${months[date.month - 1]} ${date.year}';
+  }
 }
