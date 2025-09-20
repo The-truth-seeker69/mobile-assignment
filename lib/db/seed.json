@@ -5,28 +5,95 @@
       "phone": "+60123456789",
       "imagePath": "alvin.jpg",
       "email": "ngjw-wm22@student.tarc.edu.my",
-      "address": "123 Main St, Kuala Lumpur",
-      "vehicles": [
-        "veh001"
-      ]
+      "address": "123 Main St, Kuala Lumpur"
     },
     "cust002": {
       "name": "Sarah Lee",
       "phone": "+60119876543",
       "email": "sarah@example.com",
       "imagePath": "jack.jpg",
-      "address": "45 Jalan Bukit, Penang",
-      "vehicles": [
-        "veh002",
-        "veh003"
-      ]
+      "address": "45 Jalan Bukit, Penang"
+    },
+    "cust003": {
+      "name": "Ali Hassan",
+      "phone": "+60135551234",
+      "email": "ali.hassan@example.com",
+      "address": "8 Jalan Ampang, Kuala Lumpur"
+    },
+    "cust004": {
+      "name": "Mei Ling Tan",
+      "phone": "+60178901234",
+      "email": "meiling.tan@example.com",
+      "address": "22 Persiaran Gurney, Penang"
+    },
+    "cust005": {
+      "name": "Raj Kumar",
+      "phone": "+60123459876",
+      "email": "raj.kumar@example.com",
+      "address": "15 Jalan Tun Razak, Kuala Lumpur"
+    },
+    "cust006": {
+      "name": "Nora Ahmad",
+      "phone": "+60175554321",
+      "email": "nora.ahmad@example.com",
+      "address": "88 Jalan Sutera, Johor Bahru"
+    },
+    "cust007": {
+      "name": "James Wong",
+      "phone": "+60196667788",
+      "email": "james.wong@example.com",
+      "address": "5 Jalan Pudu, Kuala Lumpur"
+    },
+    "cust008": {
+      "name": "Aisyah Binti Omar",
+      "phone": "+60134561234",
+      "email": "aisyah.omar@example.com",
+      "address": "12 Jalan Bukit Bintang, Kuala Lumpur"
+    },
+    "cust009": {
+      "name": "Michael Chan",
+      "phone": "+60187776655",
+      "email": "michael.chan@example.com",
+      "address": "31 Lebuh Pantai, George Town"
+    },
+    "cust010": {
+      "name": "Siti Mariam",
+      "phone": "+60142345678",
+      "email": "siti.mariam@example.com",
+      "address": "72 Jalan Merdeka, Melaka"
+    },
+    "cust011": {
+      "name": "Daniel Lim",
+      "phone": "+60131239876",
+      "email": "daniel.lim@example.com",
+      "address": "9 Jalan Petaling, Kuala Lumpur"
+    },
+    "cust012": {
+      "name": "Farah Zain",
+      "phone": "+60153334444",
+      "email": "farah.zain@example.com",
+      "address": "14 Jalan Kempas, Johor Bahru"
+    },
+    "cust013": {
+      "name": "Henry Tan",
+      "phone": "+60164445566",
+      "email": "henry.tan@example.com",
+      "address": "6 Jalan Gaya, Kota Kinabalu"
+    },
+    "cust014": {
+      "name": "Chong Wei",
+      "phone": "+60175556677",
+      "email": "chong.wei@example.com",
+      "address": "20 Jalan Iskandar, Ipoh"
     }
-  },
+},
+
   "vehicles": {
     "veh001": {
       "customerId": "cust001",
       "make": "Toyota",
       "model": "Corolla",
+      "plateNumber": "JNS1203",
       "year": 2020,
       "vin": "JT12345ABC67890"
     },
@@ -34,17 +101,108 @@
       "customerId": "cust002",
       "make": "Honda",
       "model": "Civic",
+      "plateNumber": "JPS1203",
       "year": 2019,
       "vin": "HN54321XYZ12345"
     },
     "veh003": {
-      "customerId": "cust002",
+      "customerId": "cust003",
       "make": "Perodua",
       "model": "Myvi",
+      "plateNumber": "ABC1",
       "year": 2022,
       "vin": "MY99887LMNOP345"
+    },
+    "veh004": {
+      "customerId": "cust004",
+      "make": "Toyota",
+      "model": "Vios",
+      "plateNumber": "XYZ2",
+      "year": 2021,
+      "vin": "TY12345ABCD6789"
+    },
+    "veh005": {
+      "customerId": "cust005",
+      "make": "Honda",
+      "model": "Civic",
+      "plateNumber": "JKL3",
+      "year": 2020,
+      "vin": "HN23456EFGH7890"
+    },
+    "veh006": {
+      "customerId": "cust006",
+      "make": "Nissan",
+      "model": "Almera",
+      "plateNumber": "MNO4",
+      "year": 2019,
+      "vin": "NS34567IJKL8901"
+    },
+    "veh007": {
+      "customerId": "cust007",
+      "make": "Mazda",
+      "model": "CX-5",
+      "plateNumber": "PQR5",
+      "year": 2022,
+      "vin": "MZ45678MNOP9012"
+    },
+    "veh008": {
+      "customerId": "cust008",
+      "make": "Ford",
+      "model": "Ranger",
+      "plateNumber": "STU6",
+      "year": 2023,
+      "vin": "FD56789QRST0123"
+    },
+    "veh009": {
+      "customerId": "cust009",
+      "make": "BMW",
+      "model": "X5",
+      "plateNumber": "VWX7",
+      "year": 2021,
+      "vin": "BM67890UVWX1234"
+    },
+    "veh010": {
+      "customerId": "cust010",
+      "make": "Mercedes",
+      "model": "C200",
+      "plateNumber": "YZA8",
+      "year": 2020,
+      "vin": "MC78901YZAB2345"
+    },
+    "veh011": {
+      "customerId": "cust011",
+      "make": "Hyundai",
+      "model": "Tucson",
+      "plateNumber": "BCD9",
+      "year": 2018,
+      "vin": "HY89012BCDE3456"
+    },
+    "veh012": {
+      "customerId": "cust012",
+      "make": "Kia",
+      "model": "Sportage",
+      "plateNumber": "EFG0",
+      "year": 2022,
+      "vin": "KA90123CDEF4567"
+    },
+    "veh013": {
+      "customerId": "cust013",
+      "make": "Proton",
+      "model": "X70",
+      "plateNumber": "HIJ1",
+      "year": 2021,
+      "vin": "PT01234DEFG5678"
+    },
+    "veh014": {
+      "customerId": "cust014",
+      "make": "Volkswagen",
+      "model": "Golf",
+      "plateNumber": "KLM2",
+      "year": 2020,
+      "vin": "VW12345FGHI6789"
     }
   },
+
   "mechanics": {
     "mech001": {
       "name": "Ali Bin Omar",
@@ -190,190 +348,6 @@
       "usageLog": []
     }
   },
-  "jobs": {
-    "job001": {
-      "customerId": "cust001",
-      "vehicleId": "veh001",
-      "mechanicId": null,
-      "status": "",
-      "scheduledDate": "2025-09-15",
-      "scheduledTime": "10:30",
-      "completionDate": null,
-      "description": "Brake pad replacement",
-      "partsUsed": []
-    },
-    "job002": {
-      "customerId": "cust002",
-      "vehicleId": "veh002",
-      "mechanicId": "mech004",
-      "status": "in-progress",
-      "scheduledDate": "2025-09-16",
-      "scheduledTime": "09:00",
-      "completionDate": null,
-      "description": "Engine oil change and filter replacement",
-      "partsUsed": [
-        "IT005",
-        "IT007"
-      ]
-    },
-    "job003": {
-      "customerId": "cust003",
-      "vehicleId": "veh003",
-      "mechanicId": null,
-      "status": "",
-      "scheduledDate": "2025-09-16",
-      "scheduledTime": "09:00",
-      "completionDate": null,
-      "description": "Transmission fluid service",
-      "partsUsed": []
-    },
-    "job004": {
-      "customerId": "cust004",
-      "vehicleId": "veh001",
-      "mechanicId": "mech006",
-      "status": "completed",
-      "scheduledDate": "2025-09-12",
-      "scheduledTime": "11:30",
-      "completionDate": "2025-09-12",
-      "description": "Battery replacement",
-      "partsUsed": [
-        "IT002"
-      ]
-    },
-    "job005": {
-      "customerId": "cust005",
-      "vehicleId": "veh002",
-      "mechanicId": "mech003",
-      "status": "assigned",
-      "scheduledDate": "2025-09-18",
-      "scheduledTime": "16:00",
-      "completionDate": null,
-      "description": "Brake rotor resurfacing",
-      "partsUsed": [
-        "IT003"
-      ]
-    },
-    "job006": {
-      "customerId": "cust006",
-      "vehicleId": "veh003",
-      "mechanicId": "mech007",
-      "status": "in-progress",
-      "scheduledDate": "2025-09-15",
-      "scheduledTime": "13:15",
-      "completionDate": null,
-      "description": "Wheel alignment and balancing",
-      "partsUsed": [
-        "IT002"
-      ]
-    },
-    "job007": {
-      "customerId": "cust007",
-      "vehicleId": "veh001",
-      "mechanicId": "mech005",
-      "status": "assigned",
-      "scheduledDate": "2025-09-19",
-      "scheduledTime": "10:00",
-      "completionDate": null,
-      "description": "Suspension strut replacement",
-      "partsUsed": [
-        "IT005",
-        "IT002"
-      ]
-    },
-    "job008": {
-      "customerId": "cust008",
-      "vehicleId": "veh002",
-      "mechanicId": "mech008",
-      "status": "completed",
-      "scheduledDate": "2025-09-16",
-      "scheduledTime": "09:30",
-      "completionDate": "2025-09-13",
-      "description": "Tire replacement (4 tires)",
-      "partsUsed": [
-        "IT002",
-        "IT001"
-      ]
-    },
-    "job009": {
-      "customerId": "cust009",
-      "vehicleId": "veh003",
-      "mechanicId": "mech009",
-      "status": "assigned",
-      "scheduledDate": "2025-09-16",
-      "scheduledTime": "10:00",
-      "completionDate": null,
-      "description": "Exhaust muffler repair",
-      "partsUsed": [
-        "IT002"
-      ]
-    },
-    "job010": {
-      "customerId": "cust010",
-      "vehicleId": "veh003",
-      "mechanicId": "mech010",
-      "status": "assigned",
-      "scheduledDate": "2025-09-16",
-      "scheduledTime": "10:01",
-      "completionDate": null,
-      "description": "Headlight assembly replacement",
-      "partsUsed": [
-        "IT001",
-        "IT003"
-      ]
-    },
-    "job011": {
-      "customerId": "cust011",
-      "vehicleId": "veh001",
-      "mechanicId": "mech002",
-      "status": "in-progress",
-      "scheduledDate": "2025-09-15",
-      "scheduledTime": "08:00",
-      "completionDate": null,
-      "description": "Brake fluid flush",
-      "partsUsed": [
-        "IT006"
-      ]
-    },
-    "job012": {
-      "customerId": "cust012",
-      "vehicleId": "veh002",
-      "mechanicId": "mech001",
-      "status": "assigned",
-      "scheduledDate": "2025-09-22",
-      "scheduledTime": "14:45",
-      "completionDate": null,
-      "description": "Air conditioning system recharge",
-      "partsUsed": [
-        "IT005",
-        "IT004"
-      ]
-    },
-    "job013": {
-      "customerId": "cust013",
-      "vehicleId": "veh003",
-      "mechanicId": "mech006",
-      "status": "assigned",
-      "scheduledDate": "2025-09-23",
-      "scheduledTime": "12:30",
-      "completionDate": null,
-      "description": "Starter motor replacement",
-      "partsUsed": [
-        "IT001"
-      ]
-    },
-    "job014": {
-      "customerId": "cust013",
-      "vehicleId": "veh003",
-      "mechanicId": "mech001",
-      "status": "completed",
-      "scheduledDate": "2025-09-10",
-      "scheduledTime": "14:00",
-      "completionDate": "2025-09-12",
-      "description": "Engine oil change",
-      "partsUsed": [
-        "IT004"
-      ]
-    },
     "invoices": {
       "inv001": {
         "jobId": "job002",
@@ -509,6 +483,191 @@
           }
         }
       }
+    },
+
+  "jobs": {
+    "job001": {
+      "customerId": "cust001",
+      "vehicleId": "veh001",
+      "mechanicId": null,
+      "status": "",
+      "scheduledDate": "2025-09-15",
+      "scheduledTime": "10:30",
+      "completionDate": null,
+      "description": "Brake pad replacement",
+      "partsUsed": []
+    },
+    "job002": {
+      "customerId": "cust002",
+      "vehicleId": "veh002",
+      "mechanicId": "mech004",
+      "status": "in-progress",
+      "scheduledDate": "2025-09-16",
+      "scheduledTime": "09:00",
+      "completionDate": null,
+      "description": "Engine oil change and filter replacement",
+      "partsUsed": [
+        "IT005",
+        "IT007"
+      ]
+    },
+    "job003": {
+      "customerId": "cust003",
+      "vehicleId": "veh003",
+      "mechanicId": null,
+      "status": "",
+      "scheduledDate": "2025-09-16",
+      "scheduledTime": "09:00",
+      "completionDate": null,
+      "description": "Transmission fluid service",
+      "partsUsed": []
+    },
+    "job004": {
+      "customerId": "cust004",
+      "vehicleId": "veh004",
+      "mechanicId": "mech006",
+      "status": "completed",
+      "scheduledDate": "2025-09-12",
+      "scheduledTime": "11:30",
+      "completionDate": "2025-09-12",
+      "description": "Battery replacement",
+      "partsUsed": [
+        "IT002"
+      ]
+    },
+    "job005": {
+      "customerId": "cust005",
+      "vehicleId": "veh005",
+      "mechanicId": "mech003",
+      "status": "assigned",
+      "scheduledDate": "2025-09-18",
+      "scheduledTime": "16:00",
+      "completionDate": null,
+      "description": "Brake rotor resurfacing",
+      "partsUsed": [
+        "IT003"
+      ]
+    },
+    "job006": {
+      "customerId": "cust006",
+      "vehicleId": "veh006",
+      "mechanicId": "mech007",
+      "status": "in-progress",
+      "scheduledDate": "2025-09-15",
+      "scheduledTime": "13:15",
+      "completionDate": null,
+      "description": "Wheel alignment and balancing",
+      "partsUsed": [
+        "IT002"
+      ]
+    },
+    "job007": {
+      "customerId": "cust007",
+      "vehicleId": "veh007",
+      "mechanicId": "mech005",
+      "status": "assigned",
+      "scheduledDate": "2025-09-19",
+      "scheduledTime": "10:00",
+      "completionDate": null,
+      "description": "Suspension strut replacement",
+      "partsUsed": [
+        "IT005",
+        "IT002"
+      ]
+    },
+    "job008": {
+      "customerId": "cust008",
+      "vehicleId": "veh008",
+      "mechanicId": "mech008",
+      "status": "completed",
+      "scheduledDate": "2025-09-16",
+      "scheduledTime": "09:30",
+      "completionDate": "2025-09-13",
+      "description": "Tire replacement (4 tires)",
+      "partsUsed": [
+        "IT002",
+        "IT001"
+      ]
+    },
+    "job009": {
+      "customerId": "cust009",
+      "vehicleId": "veh009",
+      "mechanicId": "mech009",
+      "status": "assigned",
+      "scheduledDate": "2025-09-16",
+      "scheduledTime": "10:00",
+      "completionDate": null,
+      "description": "Exhaust muffler repair",
+      "partsUsed": [
+        "IT002"
+      ]
+    },
+    "job010": {
+      "customerId": "cust010",
+      "vehicleId": "veh010",
+      "mechanicId": "mech010",
+      "status": "assigned",
+      "scheduledDate": "2025-09-16",
+      "scheduledTime": "10:01",
+      "completionDate": null,
+      "description": "Headlight assembly replacement",
+      "partsUsed": [
+        "IT001",
+        "IT003"
+      ]
+    },
+    "job011": {
+      "customerId": "cust011",
+      "vehicleId": "veh011",
+      "mechanicId": "mech002",
+      "status": "in-progress",
+      "scheduledDate": "2025-09-15",
+      "scheduledTime": "08:00",
+      "completionDate": null,
+      "description": "Brake fluid flush",
+      "partsUsed": [
+        "IT006"
+      ]
+    },
+    "job012": {
+      "customerId": "cust012",
+      "vehicleId": "veh012",
+      "mechanicId": "mech001",
+      "status": "assigned",
+      "scheduledDate": "2025-09-22",
+      "scheduledTime": "14:45",
+      "completionDate": null,
+      "description": "Air conditioning system recharge",
+      "partsUsed": [
+        "IT005",
+        "IT004"
+      ]
+    },
+    "job013": {
+      "customerId": "cust013",
+      "vehicleId": "veh013",
+      "mechanicId": "mech006",
+      "status": "assigned",
+      "scheduledDate": "2025-09-23",
+      "scheduledTime": "12:30",
+      "completionDate": null,
+      "description": "Starter motor replacement",
+      "partsUsed": [
+        "IT001"
+      ]
+    },
+    "job014": {
+      "customerId": "cust014",
+      "vehicleId": "veh014",
+      "mechanicId": "mech001",
+      "status": "completed",
+      "scheduledDate": "2025-09-10",
+      "scheduledTime": "14:00",
+      "completionDate": "2025-09-12",
+      "description": "Engine oil change",
+      "partsUsed": [
+        "IT004"
+      ]
     }
   }
 }
