@@ -4,6 +4,7 @@ class Customer {
   final String phone;
   final String email;
   final String address;
+  final String imagePath;
 
   const Customer({
     required this.id,
@@ -11,6 +12,7 @@ class Customer {
     required this.phone,
     required this.email,
     required this.address,
+    this.imagePath = '',
   });
 
   factory Customer.fromMap(String id, Map<String, dynamic> data) => Customer(
@@ -19,5 +21,6 @@ class Customer {
     phone: data['phone'] ?? '',
     email: data['email'] ?? '',
     address: data['address'] ?? '',
+    imagePath: data['imagePath'] ?? '',
   );
 }

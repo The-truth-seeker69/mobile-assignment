@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.example.assignment"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -23,6 +23,7 @@ android {
     }
 
     defaultConfig {
+<<<<<<< HEAD
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.assignment"
         // You can update the following values to match your application needs.
@@ -31,6 +32,13 @@ android {
         targetSdk = 34
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+=======
+        applicationId = "com.example.mobile_assignment"
+        minSdk = flutter.minSdkVersion
+        targetSdk = 36
+        versionCode = 1
+        versionName = "1.0"
+>>>>>>> 8d36ccf199c7253c979fcc5ec2d5715e434537d5
     }
 
     buildTypes {

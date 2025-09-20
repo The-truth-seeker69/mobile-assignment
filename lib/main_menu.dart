@@ -3,6 +3,7 @@ import '../widgets/bottom_navigation.dart';
 import 'screens/inventory_control/inventory_main.dart';
 import 'screens/invoice/invoice_list_screen.dart';
 import 'screens/work_scheduler/work.dart';
+import 'screens/crm/crm_list_screen.dart';
 // import your other modules here
 
 class MainMenuScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
     WorkScheduleScreen(), // SchedulerScreen()
     Placeholder(), // VehiclesScreen()
     InvoicesListScreen(),
-    Placeholder(), // CRMScreen()
+    CrmListScreen(),
   ];
 
   void _onNavTap(int index) {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../models/inventory_item.dart';
 import '../../widgets/bottom_navigation.dart';
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ItemRequestScreen extends StatefulWidget {
   final InventoryItem item;
@@ -14,6 +16,44 @@ class ItemRequestScreen extends StatefulWidget {
 class _ItemRequestScreenState extends State<ItemRequestScreen> {
   final TextEditingController _notesController = TextEditingController();
   int _quantity = 1;
+  bool _isSubmitting = false;
+
+
+  Future<String> _generateRequestId() async {
+    try {
+      // Get the last request to determine the next ID
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('requests')
+          .orderBy('timestamp', descending: true) // Order by timestamp
+          .limit(1)
+          .get();
+
+      String newId = "RQ001"; // Default if no requests exist
+
+      if (snapshot.docs.isNotEmpty) {
+        final lastDoc = snapshot.docs.first;
+        final String lastId = lastDoc.id;
+
+        if (lastId.startsWith('RQ')) {
+          // Extract the numeric part and increment
+          try {
+            final String numericPart = lastId.substring(2);
+            int lastNum = int.parse(numericPart);
+            int nextNum = lastNum + 1;
+            newId = "RQ${nextNum.toString().padLeft(3, '0')}";
+          } catch (e) {
+            // If parsing fails, fall back to default
+            print("Error parsing request ID: $e");
+          }
+        }
+      }
+
+      return newId;
+    } catch (e) {
+      print("Error generating request ID: $e");
+      return "RQ001"; // Fallback in case of error
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +107,10 @@ class _ItemRequestScreenState extends State<ItemRequestScreen> {
                       ),
                     ),
                     const SizedBox(height: 8),
+
+                    // Item name + ID
                     Text(
-                      '${widget.item.name} (${widget.item.partCode})',
+                      '${widget.item.name} (${widget.item.id})',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -80,16 +122,21 @@ class _ItemRequestScreenState extends State<ItemRequestScreen> {
                     // Item Image
                     Container(
                       width: double.infinity,
-                      height: 120,
+                      height: 320,
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Icon(
-                        Icons.inventory_2,
-                        color: Colors.grey,
-                        size: 60,
-                      ),
+                        child: widget.item.imagePath.isNotEmpty
+                            ? Image.file(
+                          File(widget.item.imagePath),
+                          fit: BoxFit.cover,
+                        )
+                            : const Icon(
+                          Icons.inventory_2,
+                          color: Colors.grey,
+                          size: 30,
+                        )
                     ),
                     const SizedBox(height: 20),
 
@@ -124,7 +171,7 @@ class _ItemRequestScreenState extends State<ItemRequestScreen> {
                           ),
                         ),
                         Text(
-                          widget.item.partCode,
+                          widget.item.id,
                           style: const TextStyle(
                             fontSize: 14,
                             color: Colors.black,
@@ -283,10 +330,7 @@ class _ItemRequestScreenState extends State<ItemRequestScreen> {
                         // Submit Button
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {
-                              // Handle submit
-                              _showSuccessDialog();
-                            },
+                            onPressed: _isSubmitting ? null : _submitRequest,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.black,
                               foregroundColor: Colors.white,
@@ -295,7 +339,16 @@ class _ItemRequestScreenState extends State<ItemRequestScreen> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: const Text(
+                            child: _isSubmitting
+                                ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                                : const Text(
                               'Submit',
                               style: TextStyle(
                                 fontSize: 16,
@@ -313,7 +366,7 @@ class _ItemRequestScreenState extends State<ItemRequestScreen> {
           ),
         ],
       ),
-      bottomNavigationBar:  BottomNavigation(
+      bottomNavigationBar: BottomNavigation(
         currentIndex: 0,
         onTap: (index) {
           // Handle navigation
@@ -322,13 +375,49 @@ class _ItemRequestScreenState extends State<ItemRequestScreen> {
     );
   }
 
-  void _showSuccessDialog() {
+  Future<void> _submitRequest() async {
+    setState(() {
+      _isSubmitting = true;
+    });
+
+    try {
+      // Generate the request ID
+      final String requestId = await _generateRequestId();
+
+      // Save request data into Firestore using the custom ID as document ID
+      await FirebaseFirestore.instance
+          .collection('requests')
+          .doc(requestId) // Use the custom ID as the document ID
+          .set({
+        'itemId': widget.item.id,
+        'itemName': widget.item.name,
+        'quantity': _quantity,
+        'notes': _notesController.text.trim(),
+        'timestamp': FieldValue.serverTimestamp(),
+        'status': 'pending', // You can add a status field
+      });
+
+      // Show success dialog
+      _showSuccessDialog(requestId);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error submitting request: $e")),
+      );
+    } finally {
+      setState(() {
+        _isSubmitting = false;
+      });
+    }
+  }
+
+  void _showSuccessDialog(String requestId) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Request Submitted'),
-          content: Text('Your request for $_quantity ${widget.item.name}(s) has been submitted successfully.'),
+          content: Text(
+              'Your request (ID: $requestId) for $_quantity ${widget.item.name}(s) has been submitted successfully.'),
           actions: [
             TextButton(
               onPressed: () {
