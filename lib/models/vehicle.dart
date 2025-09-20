@@ -3,6 +3,7 @@ class Vehicle {
   final String customerId;
   final String make;
   final String model;
+  final String plateNumber;
   final int year;
   final String vin;
 
@@ -11,6 +12,7 @@ class Vehicle {
     required this.customerId,
     required this.make,
     required this.model,
+    required this.plateNumber,
     required this.year,
     required this.vin,
   });
@@ -23,6 +25,7 @@ class Vehicle {
       customerId: data['customerId'] ?? '',
       make: data['make'] ?? '',
       model: data['model'] ?? '',
+      plateNumber: data['plateNumber'] ?? '',
       year: year,
       vin: data['vin'] ?? '',
     );

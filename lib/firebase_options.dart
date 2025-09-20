@@ -41,48 +41,48 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDg8L-VrdxEdpzLVMyQnyBrDlO6WZ37HGg',
-    appId: '1:441168981902:web:8b51ad1a25ea4e4464bedf',
-    messagingSenderId: '441168981902',
-    projectId: 'job-management-ec8f0',
-    authDomain: 'job-management-ec8f0.firebaseapp.com',
-    storageBucket: 'job-management-ec8f0.firebasestorage.app',
-    measurementId: 'G-G7QN9Z9F2P',
+    apiKey: 'AIzaSyDmcvVgYA9UGVIAqL-dzAzOLu1B8bGPmq4',
+    appId: '1:80233124852:web:0f31d8cd0d970c914c5fa1',
+    messagingSenderId: '80233124852',
+    projectId: 'greenstem-f1f65',
+    authDomain: 'greenstem-f1f65.firebaseapp.com',
+    storageBucket: 'greenstem-f1f65.firebasestorage.app',
+    measurementId: 'G-6YDZ4LSYKH',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC23qJ_tfhZpLIeoYL5dTGBqAz8qJurK50',
-    appId: '1:441168981902:android:c0ca4aab7c4d2c0c64bedf',
-    messagingSenderId: '441168981902',
-    projectId: 'job-management-ec8f0',
-    storageBucket: 'job-management-ec8f0.firebasestorage.app',
+    apiKey: 'AIzaSyCnxgLCV0N94Rezib8ynM2qPL371ubjMzo',
+    appId: '1:80233124852:android:0130e0202495d92e4c5fa1',
+    messagingSenderId: '80233124852',
+    projectId: 'greenstem-f1f65',
+    storageBucket: 'greenstem-f1f65.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAkwogjBwc9De18ay0hX_WlIOEWzaMTBPk',
-    appId: '1:441168981902:ios:8dd8e0f23cc8e8fa64bedf',
-    messagingSenderId: '441168981902',
-    projectId: 'job-management-ec8f0',
-    storageBucket: 'job-management-ec8f0.firebasestorage.app',
-    iosBundleId: 'com.example.assignment',
+    apiKey: 'AIzaSyCZt1zTKfEfvOWGPmTDak6s1MrxxxN8gwM',
+    appId: '1:80233124852:ios:53a5a702f5a66c9f4c5fa1',
+    messagingSenderId: '80233124852',
+    projectId: 'greenstem-f1f65',
+    storageBucket: 'greenstem-f1f65.firebasestorage.app',
+    iosBundleId: 'com.example.greenstem',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAkwogjBwc9De18ay0hX_WlIOEWzaMTBPk',
-    appId: '1:441168981902:ios:8dd8e0f23cc8e8fa64bedf',
-    messagingSenderId: '441168981902',
-    projectId: 'job-management-ec8f0',
-    storageBucket: 'job-management-ec8f0.firebasestorage.app',
-    iosBundleId: 'com.example.assignment',
+    apiKey: 'AIzaSyCZt1zTKfEfvOWGPmTDak6s1MrxxxN8gwM',
+    appId: '1:80233124852:ios:53a5a702f5a66c9f4c5fa1',
+    messagingSenderId: '80233124852',
+    projectId: 'greenstem-f1f65',
+    storageBucket: 'greenstem-f1f65.firebasestorage.app',
+    iosBundleId: 'com.example.greenstem',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyDg8L-VrdxEdpzLVMyQnyBrDlO6WZ37HGg',
-    appId: '1:441168981902:web:a4f87ef2631592cb64bedf',
-    messagingSenderId: '441168981902',
-    projectId: 'job-management-ec8f0',
-    authDomain: 'job-management-ec8f0.firebaseapp.com',
-    storageBucket: 'job-management-ec8f0.firebasestorage.app',
-    measurementId: 'G-1W0YJ7JHZM',
+    apiKey: 'AIzaSyDmcvVgYA9UGVIAqL-dzAzOLu1B8bGPmq4',
+    appId: '1:80233124852:web:efb081b20e0cf8114c5fa1',
+    messagingSenderId: '80233124852',
+    projectId: 'greenstem-f1f65',
+    authDomain: 'greenstem-f1f65.firebaseapp.com',
+    storageBucket: 'greenstem-f1f65.firebasestorage.app',
+    measurementId: 'G-78807DPDSE',
   );
 }
