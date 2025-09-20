@@ -299,9 +299,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                     return 'Please enter item name';
                   }
                   // Regex: only letters and spaces allowed
-                  if (!RegExp(r'^[A-Za-z ]+$').hasMatch(value.trim())) {
-                    return 'Item name can only contain letters and spaces';
-                  }
+
                   return null;
                 },
               ),
