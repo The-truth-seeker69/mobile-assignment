@@ -1,5 +1,12 @@
+import 'dart:io';
+import 'dart:math';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-import '../../widgets/bottom_navigation.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 
 class AddInventoryScreen extends StatefulWidget {
   const AddInventoryScreen({super.key});
@@ -11,10 +18,13 @@ class AddInventoryScreen extends StatefulWidget {
 class _AddInventoryScreenState extends State<AddInventoryScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _itemNameController = TextEditingController();
-  final TextEditingController _partCodeController = TextEditingController();
-  final TextEditingController _quantityController = TextEditingController(text: '5');
+  final TextEditingController _quantityController =
+  TextEditingController(text: '5');
   final TextEditingController _supplierController = TextEditingController();
   final TextEditingController _remarksController = TextEditingController();
+  File? _selectedImage;
+  final picker = ImagePicker();
+  bool _isSaving = false;
 
   String _selectedCategory = 'Brake';
 
@@ -28,6 +38,172 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
     'Interior',
     'Other'
   ];
+
+  /// Pick image from gallery with improved error handling
+  Future<void> _pickImage() async {
+    try {
+      final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        setState(() {
+          _selectedImage = File(pickedFile.path);
+        });
+        print("✅ Image selected: ${pickedFile.path}");
+      }
+    } catch (e) {
+      print("❌ Error picking image: $e");
+      _showErrorDialog('Image Selection Error', 'Failed to pick image: $e');
+    }
+  }
+
+  /// Take photo with camera
+  Future<void> _takePhoto() async {
+    try {
+      final pickedFile = await picker.pickImage(source: ImageSource.camera);
+
+      if (pickedFile != null) {
+        setState(() {
+          _selectedImage = File(pickedFile.path);
+        });
+        print("✅ Photo taken: ${pickedFile.path}");
+      }
+    } catch (e) {
+      print("❌ Error taking photo: $e");
+      _showErrorDialog('Camera Error', 'Failed to take photo: $e');
+    }
+  }
+
+  /// Get application directory with fallback
+  Future<Directory> _getAppDirectory() async {
+    try {
+      return await getApplicationDocumentsDirectory();
+    } catch (e) {
+      print("❌ Error getting app directory: $e");
+      // Fallback to temporary directory
+      return Directory.systemTemp;
+    }
+  }
+
+  /// Save image to local storage with improved error handling
+  Future<String?> _saveImageLocally(File image, String itemId) async {
+    try {
+      final appDocDir = await _getAppDirectory();
+      final fileName =
+          '${DateTime.now().millisecondsSinceEpoch}_$itemId${p.extension(image.path)}';
+      final savedImage = await image.copy('${appDocDir.path}/$fileName');
+
+      print("✅ Image saved at: ${savedImage.path}");
+      return savedImage.path;
+    } catch (e) {
+      print("❌ Error saving image locally: $e");
+      // If local saving fails, we'll still proceed without the image path
+      return null;
+    }
+  }
+
+  Future<void> _saveItem() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    // Check if image is selected
+    if (_selectedImage == null) {
+      _showErrorDialog('Missing Image', 'Please choose an image before saving.');
+      return;
+    }
+
+    setState(() {
+      _isSaving = true;
+    });
+
+    try {
+      // Generate new item ID
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('inventory')
+          .orderBy(FieldPath.documentId, descending: true)
+          .limit(1)
+          .get();
+
+      String newId = "IT001";
+      if (snapshot.docs.isNotEmpty) {
+        String lastId = snapshot.docs.first.id;
+        int lastNum = int.parse(lastId.substring(2));
+        int nextNum = lastNum + 1;
+        newId = "IT${nextNum.toString().padLeft(3, '0')}";
+      }
+
+      // Try to save image locally (but proceed even if it fails)
+      String? imagePath;
+      try {
+        imagePath = await _saveImageLocally(_selectedImage!, newId);
+      } catch (e) {
+        print("⚠️ Image saving failed but proceeding: $e");
+        // We'll continue without the image path
+      }
+
+      // Save to Firestore
+      await FirebaseFirestore.instance.collection('inventory').doc(newId).set({
+        'itemID': newId,
+        'category': _selectedCategory,
+        'imagePath': imagePath, // This might be null if saving failed
+        'isLowStock': int.parse(_quantityController.text.trim()) <= 5,
+        'lastRefill': null,
+        'name': _itemNameController.text.trim(),
+        'quantity': int.parse(_quantityController.text.trim()),
+        'supplier': _supplierController.text.trim(),
+        'remarks': _remarksController.text.trim(),
+        'usageLog': [],
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      _showSuccessDialog();
+    } catch (e) {
+      print("❌ Error saving item: $e");
+      _showErrorDialog('Save Error', 'Failed to add item: $e');
+    } finally {
+      setState(() {
+        _isSaving = false;
+      });
+    }
+  }
+
+  void _showErrorDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Item Added'),
+          content: Text(
+              '${_itemNameController.text} has been added to inventory successfully.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,31 +233,87 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Image selection section
+              const Text(
+                'Item Image',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+              const SizedBox(height: 8),
+
+              // Image preview
+              Container(
+                width: double.infinity,
+                height: 200,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey[300]!),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: _selectedImage != null
+                    ? ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.file(
+                    _selectedImage!,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
+                )
+                    : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.image,
+                          size: 50, color: Colors.grey[400]),
+                      const SizedBox(height: 8),
+                      Text(
+                        'No image selected',
+                        style: TextStyle(color: Colors.grey[600]),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Image selection buttons
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      icon: const Icon(Icons.photo_library),
+                      label: const Text('Gallery'),
+                      onPressed: _pickImage,
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      icon: const Icon(Icons.camera_alt),
+                      label: const Text('Camera'),
+                      onPressed: _takePhoto,
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+
               // Item Name
               _buildFormField(
                 label: 'Item Name',
                 controller: _itemNameController,
                 hintText: 'Enter name',
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter item name';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Part Code / ID
-              _buildFormField(
-                label: 'Part Code / ID',
-                controller: _partCodeController,
-                hintText: 'Enter Part Code',
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter part code';
-                  }
-                  return null;
-                },
+                validator: (value) => value == null || value.isEmpty
+                    ? 'Please enter item name'
+                    : null,
               ),
               const SizedBox(height: 16),
 
@@ -108,12 +340,9 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 label: 'Supplier Name',
                 controller: _supplierController,
                 hintText: 'Enter Supplier Name',
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter supplier name';
-                  }
-                  return null;
-                },
+                validator: (value) => value == null || value.isEmpty
+                    ? 'Please enter supplier name'
+                    : null,
               ),
               const SizedBox(height: 16),
 
@@ -134,11 +363,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _showSuccessDialog();
-                    }
-                  },
+                  onPressed: _isSaving ? null : _saveItem,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
@@ -147,24 +372,25 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                   ),
-                  child: const Text(
-                    'Confirm',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                  child: _isSaving
+                      ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
                     ),
+                  )
+                      : const Text(
+                    'Confirm',
+                    style:
+                    TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigation(
-        currentIndex: 0,
-        onTap: (index) {
-          // Handle navigation
-        },
       ),
     );
   }
@@ -180,14 +406,9 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
+        Text(label,
+            style: const TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
@@ -209,7 +430,8 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(color: Colors.black),
             ),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           ),
         ),
       ],
@@ -220,14 +442,9 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Category',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
-          ),
-        ),
+        const Text('Category',
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black)),
         const SizedBox(height: 8),
         Container(
           width: double.infinity,
@@ -258,27 +475,6 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Item Added'),
-          content: Text('${_itemNameController.text} has been added to inventory successfully.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
     );
   }
 }

@@ -60,3 +60,5 @@ app.*.map.json
 #firebase setup and admin credentials
 /lib/db/serviceAccountKey.json
 /android/app/google-services.json
+firebase.json
+/lib/firebase_options.dart

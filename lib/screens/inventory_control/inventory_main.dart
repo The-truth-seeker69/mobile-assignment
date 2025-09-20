@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../models/inventory_item.dart';
 import '../../widgets/bottom_navigation.dart';
 import 'inventory_details.dart';
 import 'add_inventory.dart';
+import 'dart:io';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({super.key});
@@ -13,75 +15,6 @@ class InventoryScreen extends StatefulWidget {
 
 class _InventoryScreenState extends State<InventoryScreen> {
   final TextEditingController _searchController = TextEditingController();
-  List<InventoryItem> _inventoryItems = [];
-  List<InventoryItem> _filteredItems = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _loadInventoryItems();
-  }
-
-  void _loadInventoryItems() {
-    // Sample data based on the screenshots
-    _inventoryItems = [
-      InventoryItem(
-        id: '1',
-        name: 'Brake Pad',
-        partCode: 'BRK123',
-        quantity: 5,
-        category: 'Brake Components',
-        supplier: 'AutoParts Co.',
-        imagePath: 'assets/images/brake_pad.png',
-        isLowStock: true,
-        lastRefill: DateTime(2025, 7, 10),
-        usageLog: [
-          UsageLog(
-            date: DateTime(2025, 7, 20),
-            jobId: '1054',
-            description: 'Used in Job #1054',
-          ),
-          UsageLog(
-            date: DateTime(2025, 7, 15),
-            jobId: '1043',
-            description: 'Used in Job #1043',
-          ),
-          UsageLog(
-            date: DateTime(2025, 7, 2),
-            jobId: '1039',
-            description: 'Used in Job #1039',
-          ),
-        ],
-      ),
-      InventoryItem(
-        id: '2',
-        name: 'Air Filter',
-        partCode: 'AF456',
-        quantity: 69,
-        category: 'Engine Components',
-        supplier: 'FilterPro Inc.',
-        imagePath: 'assets/images/air_filter.png',
-        isLowStock: false,
-        lastRefill: DateTime(2025, 6, 15),
-        usageLog: [],
-      ),
-    ];
-    _filteredItems = List.from(_inventoryItems);
-  }
-
-  void _filterItems(String query) {
-    setState(() {
-      if (query.isEmpty) {
-        _filteredItems = List.from(_inventoryItems);
-      } else {
-        _filteredItems = _inventoryItems
-            .where((item) =>
-        item.name.toLowerCase().contains(query.toLowerCase()) ||
-            item.partCode.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +35,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
       ),
       body: Column(
         children: [
-          // Search and Filter Bar
+          // 🔍 Search bar
           Container(
             padding: const EdgeInsets.all(16),
             color: Colors.white,
@@ -117,9 +50,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     ),
                     child: TextField(
                       controller: _searchController,
-                      onChanged: _filterItems,
+                      onChanged: (_) => setState(() {}), // re-run filter
                       decoration: const InputDecoration(
-                        hintText: 'Search by part name, code',
+                        hintText: 'Search by item name, category, supplier',
                         hintStyle: TextStyle(color: Colors.grey),
                         prefixIcon: Icon(Icons.search, color: Colors.grey),
                         border: InputBorder.none,
@@ -144,19 +77,60 @@ class _InventoryScreenState extends State<InventoryScreen> {
               ],
             ),
           ),
-          // Inventory List
+
+          // 📦 Inventory List from Firestore
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: _filteredItems.length,
-              itemBuilder: (context, index) {
-                final item = _filteredItems[index];
-                return _buildInventoryCard(item);
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance.collection('inventory').snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                  return const Center(child: Text("No inventory items found"));
+                }
+
+                // 🔄 Convert Firestore docs into InventoryItem
+                final items = snapshot.data!.docs.map((doc) {
+                  final data = doc.data() as Map<String, dynamic>;
+                  return InventoryItem(
+                    id: doc.id,
+                    name: data['name'] ?? '',
+                    quantity: data['quantity'] ?? 0,
+                    category: data['category'] ?? '',
+                    supplier: data['supplier'] ?? '',
+                    imagePath: data['imagePath'] ?? '',
+                    isLowStock: data['isLowStock'] ?? false,
+                    lastRefill: data['lastRefill'] != null
+                        ? (data['lastRefill'] as Timestamp).toDate()
+                        : null,
+                    usageLog: [], // we’ll wire this later
+                  );
+                }).toList();
+
+                // 🔍 Filtering
+                final query = _searchController.text.toLowerCase();
+                final filtered = items.where((item) {
+                  return item.name.toLowerCase().contains(query) ||
+                      item.category.toLowerCase().contains(query) ||
+                      item.supplier.toLowerCase().contains(query);
+                }).toList();
+
+                return ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: filtered.length,
+                  itemBuilder: (context, index) {
+                    return _buildInventoryCard(filtered[index]);
+                  },
+                );
               },
             ),
           ),
         ],
       ),
+
+      // ➕ Add Inventory button
       floatingActionButton: Container(
         width: double.infinity,
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -207,7 +181,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
       ),
       child: Row(
         children: [
-          // Item Image
+          // 📷 Item Image
           Container(
             width: 60,
             height: 60,
@@ -215,14 +189,21 @@ class _InventoryScreenState extends State<InventoryScreen> {
               color: Colors.grey[200],
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(
-              Icons.inventory_2,
-              color: Colors.grey,
-              size: 30,
-            ),
+
+        child: item.imagePath.isNotEmpty
+            ? Image.file(
+          File(item.imagePath),
+          fit: BoxFit.cover,
+        )
+            : const Icon(
+          Icons.inventory_2,
+          color: Colors.grey,
+          size: 30,
+        ),
           ),
           const SizedBox(width: 16),
-          // Item Details
+
+          // 📝 Item Details
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -248,7 +229,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   Row(
                     children: [
                       const Icon(
-                        Icons.trending_up,
+                        Icons.warning,
                         color: Colors.red,
                         size: 16,
                       ),
@@ -267,7 +248,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
               ],
             ),
           ),
-          // View Button
+
+          // 🔍 View Button
           ElevatedButton(
             onPressed: () {
               Navigator.push(

@@ -3,8 +3,8 @@
     "cust001": {
       "name": "John Doe",
       "phone": "+60123456789",
-      "email": "john@example.com",
       "imagePath": "alvin.jpg",
+      "email": "ngjw-wm22@student.tarc.edu.my",
       "address": "123 Main St, Kuala Lumpur",
       "vehicles": [
         "veh001"
@@ -58,19 +58,18 @@
     }
   },
   "inventory": {
-    "part001": {
-      "partName": "Brake Pad",
-      "partNumber": "BP-2025",
-      "stockQuantity": 40,
-      "reorderLevel": 10,
-      "unitPrice": 80.0
-    },
-    "part002": {
-      "partName": "Engine Oil 4L",
-      "partNumber": "EO-4L",
-      "stockQuantity": 25,
-      "reorderLevel": 5,
-      "unitPrice": 120.0
+    "IT002": {
+      "category": "Brake",
+      "createdAt": "16 September 2025 at 14:11:22 UTC+8",
+      "imagePath": "/data/user/0/com.example.assignment/code_cache/1758003076044_IT002.jpg",
+      "isLowStock": true,
+      "itemID": "IT002",
+      "lastRefill": null,
+      "name": "Brake Pad",
+      "quantity": 5,
+      "remarks": "brake",
+      "supplier": "toyota",
+      "usageLog": []
     }
   },
   "jobs": {
@@ -117,6 +116,19 @@
       "totalAmount": 220.0,
       "status": "paid",
       "paymentDate": "2025-09-13"
+    }
+  },
+
+  "requests": {
+    "RQ001": {
+      "itemId": "IT002",
+      "quantity": 3,
+      "notes": "Needed urgently for upcoming job"
+    },
+    "RQ002": {
+      "itemId": "IT002",
+      "quantity": 1,
+      "notes": "Stock check replacement"
     }
   },
   "chats": {
