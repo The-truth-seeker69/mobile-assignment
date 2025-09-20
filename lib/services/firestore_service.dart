@@ -109,7 +109,7 @@ class FirestoreCrmService {
 
   /// Chat collections: chats/{customerId}/messages/documents/items/{messageId}
   CollectionReference<Map<String, dynamic>> _chatMessages(String customerId) =>
-      ///_db.collection('chats').doc(customerId).collection('messages').doc('documents');
+      _db.collection('chats').doc(customerId).collection('messages').doc('documents');
 
   Stream<List<Map<String, dynamic>>> streamChatMessages(String customerId) {
     return _chatMessages(customerId)
