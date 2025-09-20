@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Workshop Manager',
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme, // ✅ Using custom theme (see below)
+        theme: AppTheme.lightTheme,
         home: StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {

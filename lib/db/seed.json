@@ -19,22 +19,28 @@
   "vehicles": {
     "veh001": {
       "customerId": "cust001",
+      "imagePath": "corolla.jpeg",
       "make": "Toyota",
       "model": "Corolla",
+      "plateNo": "WWW 888",
       "year": 2020,
       "vin": "JT12345ABC67890"
     },
     "veh002": {
       "customerId": "cust002",
+      "imagePath": "civic.jpeg",
       "make": "Honda",
       "model": "Civic",
+      "plateNo": "XXX 111",
       "year": 2019,
       "vin": "HN54321XYZ12345"
     },
     "veh003": {
       "customerId": "cust002",
+      "imagePath": "myvi.jpeg",
       "make": "Perodua",
       "model": "Myvi",
+      "plateNo": "VJL 1111",
       "year": 2022,
       "vin": "MY99887LMNOP345"
     }
@@ -74,6 +80,8 @@
     "job001": {
       "vehicleId": "veh001",
       "mechanicId": "mech002",
+      "mileage": 15000,
+      "notes": "Used synthetic oil, but the oil is not really good",
       "status": "assigned",
       "scheduledDate": "2025-09-15",
       "completionDate": null,
@@ -83,11 +91,24 @@
     "job002": {
       "vehicleId": "veh003",
       "mechanicId": "mech001",
+      "mileage": 13000,
+      "notes": "Vehicle condition is not really good",
       "status": "completed",
       "scheduledDate": "2025-09-10",
       "completionDate": "2025-09-12",
       "description": "Engine oil change",
       "partsUsed": ["part002"]
+    },
+    "job003": {
+      "vehicleId": "veh001",
+      "mechanicId": "mech001",
+      "mileage": 13000,
+      "notes": "Vehicle condition good",
+      "status": "completed",
+      "scheduledDate": "2025-09-10",
+      "completionDate": "2025-09-12",
+      "description": "Engine oil change",
+      "partsUsed": ["part002", "part001"]
     }
   },
 

@@ -5,6 +5,8 @@ class Vehicle {
   final String model;
   final int year;
   final String vin;
+  final String plateNo;
+  final String? imagePath; // asset file name under assets/images/vehicles/
 
   const Vehicle({
     required this.id,
@@ -13,6 +15,8 @@ class Vehicle {
     required this.model,
     required this.year,
     required this.vin,
+    required this.plateNo,
+    this.imagePath,
   });
 
   factory Vehicle.fromMap(String id, Map<String, dynamic> data) {
@@ -25,6 +29,8 @@ class Vehicle {
       model: data['model'] ?? '',
       year: year,
       vin: data['vin'] ?? '',
+      plateNo: data['plateNo'] ?? '',
+      imagePath: data['imagePath'],
     );
   }
 }

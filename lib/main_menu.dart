@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/bottom_navigation.dart';
 import 'screens/inventory_control/inventory_main.dart';
 import 'screens/invoice/invoice_list_screen.dart';
+import 'screens/vehicles/vehicles_list_screen.dart';
 // import your other modules here
 
 class MainMenuScreen extends StatefulWidget {
@@ -12,12 +13,12 @@ class MainMenuScreen extends StatefulWidget {
 }
 
 class _MainMenuScreenState extends State<MainMenuScreen> {
-  int _currentIndex = 0; // start at "Invoices" tab
+  int _currentIndex = 2; // start at Vehicles tab per module focus
 
   final List<Widget> _pages = const [
     InventoryScreen(),
     Placeholder(), // SchedulerScreen()
-    Placeholder(), // VehiclesScreen()
+    VehiclesListScreen(),
     InvoicesListScreen(),
     Placeholder(), // CRMScreen()
   ];
