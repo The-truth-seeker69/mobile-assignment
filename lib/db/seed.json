@@ -201,8 +201,8 @@
     "job001": {
       "customerId": "cust001",
       "vehicleId": "veh001",
-      "mechanicId": "mech002",
-      "status": " ",
+      "mechanicId": null,
+      "status": "",
       "scheduledDate": "2025-09-15",
       "scheduledTime": "10:30",
       "completionDate": null,
@@ -223,8 +223,8 @@
     "job003": {
       "customerId": "cust003",
       "vehicleId": "veh003",
-      "mechanicId": "mech001",
-      "status": " ",
+      "mechanicId": null,
+      "status": "",
       "scheduledDate": "2025-09-16",
       "scheduledTime": "09:00",
       "completionDate": null,
