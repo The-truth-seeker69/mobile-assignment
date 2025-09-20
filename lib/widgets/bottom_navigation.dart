@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigation extends StatelessWidget {
@@ -32,6 +33,27 @@ class BottomNavigation extends StatelessWidget {
           _buildNavItem(2, Icons.directions_car, 'Vehicles'),
           _buildNavItem(3, Icons.receipt, 'Invoices'),
           _buildNavItem(4, Icons.people, 'CRM'),
+          // Logout Button with Icon + Text
+          GestureDetector(
+            onTap: () async {
+              await FirebaseAuth.instance.signOut();
+            },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Icon(Icons.logout, color: Colors.red),
+                SizedBox(height: 4),
+                Text(
+                  'Logout',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -44,11 +66,7 @@ class BottomNavigation extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            color: isSelected ? Colors.black : Colors.grey,
-            size: 24,
-          ),
+          Icon(icon, color: isSelected ? Colors.black : Colors.grey, size: 24),
           const SizedBox(height: 4),
           Text(
             label,

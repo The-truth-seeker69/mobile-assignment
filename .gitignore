@@ -1,3 +1,16 @@
+# Flutter/Dart/Pub related
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+.idea/
+.vscode/
+build/
+ios/Pods/
+.gradle/
+.DS_Store
+node_modules
+
 # Miscellaneous
 *.class
 *.log
@@ -48,3 +61,5 @@ app.*.map.json
 #firebase setup and admin credentials
 /lib/db/serviceAccountKey.json
 /android/app/google-services.json
+firebase.json
+/lib/firebase_options.dart

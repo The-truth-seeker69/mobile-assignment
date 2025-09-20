@@ -1,19 +1,17 @@
 class InventoryItem {
   final String id;
   final String name;
-  final String partCode;
   final int quantity;
   final String category;
   final String supplier;
   final String imagePath;
   final bool isLowStock;
-  final DateTime lastRefill;
+  final DateTime? lastRefill;
   final List<UsageLog> usageLog;
 
   InventoryItem({
     required this.id,
     required this.name,
-    required this.partCode,
     required this.quantity,
     required this.category,
     required this.supplier,

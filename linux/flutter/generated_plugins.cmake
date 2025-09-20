@@ -3,7 +3,9 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  desktop_drop
   desktop_webview_auth
+  file_selector_linux
   gtk
   printing
   url_launcher_linux
