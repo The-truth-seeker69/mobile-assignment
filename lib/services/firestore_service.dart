@@ -79,6 +79,12 @@ class FirestoreCrmService {
     return Customer.fromMap(snap.id, snap.data()!);
   }
 
+  Future<Mechanic?> getMechanic(String id) async {
+    final snap = await _db.collection('mechanics').doc(id).get();
+    if (!snap.exists) return null;
+    return Mechanic.fromMap(snap.id, snap.data()!);
+  }
+
   Stream<List<Vehicle>> streamVehiclesForCustomer(String customerId) {
     return _vehiclesCol
         .where('customerId', isEqualTo: customerId)

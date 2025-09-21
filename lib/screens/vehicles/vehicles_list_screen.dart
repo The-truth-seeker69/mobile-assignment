@@ -176,7 +176,14 @@ class _VehicleCard extends StatelessWidget {
               width: 72,
               height: 72,
               child: vehicle.imagePath != null && vehicle.imagePath!.isNotEmpty
-                  ? Image.asset('assets/images/vehicles/${vehicle.imagePath}', fit: BoxFit.cover)
+                  ? Image.asset(
+                      'assets/images/vehicles/${vehicle.imagePath}',
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        print('Image load error for ${vehicle.imagePath}: $error');
+                        return const Icon(Icons.directions_car, size: 32, color: Colors.black54);
+                      },
+                    )
                   : const Icon(Icons.directions_car, size: 32, color: Colors.black54),
             ),
           ),
@@ -225,5 +232,3 @@ class _FilterSheet extends StatelessWidget {
     );
   }
 }
-
-

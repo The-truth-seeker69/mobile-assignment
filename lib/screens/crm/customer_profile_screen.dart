@@ -351,85 +351,92 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   }
 
   Widget _jobTile(Job j) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Date and Service Type
-          Row(
+    return FutureBuilder<Mechanic?>(
+      future: _crm.getMechanic(j.mechanicId),
+      builder: (context, mechSnap) {
+        final mechanicName = mechSnap.hasData ? mechSnap.data!.name : 'Unknown';
+        
+        return Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                j.scheduledDate != null ? _formatDate(j.scheduledDate!) : '-',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
+              // Date and Service Type
+              Row(
+                children: [
+                  Text(
+                    j.scheduledDate != null ? _formatDate(j.scheduledDate!) : '-',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
+                  ),
+                  const Text(' | ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87)),
+                  Text(
+                    j.description,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
+                  ),
+                ],
               ),
-              const Text(' | ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87)),
-              Text(
-                j.description,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          // Mechanic and Mileage
-          Row(
-            children: [
-              Text(
-                'Mechanic: ',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black87),
-              ),
-              Text(
-                'Azman', // This should be fetched from mechanic data
-                style: const TextStyle(fontSize: 12, color: Colors.black87),
-              ),
-              const Text(' | ', style: TextStyle(fontSize: 12, color: Colors.black87)),
-              Text(
-                'Mileage: ',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black87),
-              ),
-              Text(
-                '${j.mileage?.toStringAsFixed(0) ?? '-'} km',
-                style: const TextStyle(fontSize: 12, color: Colors.black87),
-              ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          // Notes
-          if (j.notes != null && j.notes!.isNotEmpty) ...[
-            Row(
-              children: [
-                Text(
-                  'Notes: ',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black87),
-                ),
-                Expanded(
-                  child: Text(
-                    j.notes!,
+              const SizedBox(height: 8),
+              // Mechanic and Mileage
+              Row(
+                children: [
+                  Text(
+                    'Mechanic: ',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black87),
+                  ),
+                  Text(
+                    mechanicName,
                     style: const TextStyle(fontSize: 12, color: Colors.black87),
                   ),
+                  const Text(' | ', style: TextStyle(fontSize: 12, color: Colors.black87)),
+                  Text(
+                    'Mileage: ',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black87),
+                  ),
+                  Text(
+                    '${j.mileage?.toStringAsFixed(0) ?? '-'} km',
+                    style: const TextStyle(fontSize: 12, color: Colors.black87),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              // Notes
+              if (j.notes != null && j.notes!.isNotEmpty) ...[
+                Row(
+                  children: [
+                    Text(
+                      'Notes: ',
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black87),
+                    ),
+                    Expanded(
+                      child: Text(
+                        j.notes!,
+                        style: const TextStyle(fontSize: 12, color: Colors.black87),
+                      ),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 4),
               ],
-            ),
-            const SizedBox(height: 4),
-          ],
-          // Invoice
-          Row(
-            children: [
-              Text(
-                'IN 001', // This should be fetched from invoice data
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black87),
+              // Invoice
+              Row(
+                children: [
+                  Text(
+                    'IN 001', // This should be fetched from invoice data
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black87),
+                  ),
+                  const Text(' - ', style: TextStyle(fontSize: 12, color: Colors.black87)),
+                  Text(
+                    'Debit Card', // This should be fetched from payment method
+                    style: const TextStyle(fontSize: 12, color: Colors.black87),
+                  ),
+                  const Spacer(),
+                  const Icon(Icons.description, size: 16, color: Colors.black54),
+                ],
               ),
-              const Text(' - ', style: TextStyle(fontSize: 12, color: Colors.black87)),
-              Text(
-                'Debit Card', // This should be fetched from payment method
-                style: const TextStyle(fontSize: 12, color: Colors.black87),
-              ),
-              const Spacer(),
-              const Icon(Icons.description, size: 16, color: Colors.black54),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 

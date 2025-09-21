@@ -51,8 +51,19 @@ class _ChatScreenState extends State<ChatScreen> {
             child: StreamBuilder<List<Map<String, dynamic>>>(
               stream: _crm.streamChatMessages(widget.customerId),
               builder: (context, snap) {
-                if (!snap.hasData) return const Center(child: CircularProgressIndicator());
+                if (snap.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (snap.hasError) {
+                  print('Chat error: ${snap.error}');
+                  return Center(child: Text('Error: ${snap.error}'));
+                }
+                if (!snap.hasData) {
+                  print('No chat data available');
+                  return const Center(child: Text('No messages found'));
+                }
                 final messages = snap.data!;
+                print('Raw messages from Firestore: $messages');
                 
                 // Sort messages by timestamp to ensure oldest to newest order
                 final sortedMessages = List<Map<String, dynamic>>.from(messages);

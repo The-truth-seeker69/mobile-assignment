@@ -10,6 +10,7 @@ ios/Pods/
 .gradle/
 .DS_Store
 node_modules
+lib/db/serviceAccountKey.json
 
 # Miscellaneous
 *.class

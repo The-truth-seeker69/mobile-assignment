@@ -133,10 +133,10 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
 
 
           final futures = <Future<DocumentSnapshot>>[];
-          if (job.customerId.isNotEmpty) {
+          if (job.customerId?.isNotEmpty == true) {
             futures.add(FirebaseFirestore.instance
                 .collection('customers')
-                .doc(job.customerId)
+                .doc(job.customerId!)
                 .get());
           }
           if (job.vehicleId.isNotEmpty) {
@@ -153,14 +153,14 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
               Vehicle? vehicle;
 
               if (detailsSnap.hasData) {
-                if (job.customerId.isNotEmpty && detailsSnap.data!.isNotEmpty) {
+                if (job.customerId?.isNotEmpty == true && detailsSnap.data!.isNotEmpty) {
                   customer = Customer.fromMap(
-                    job.customerId,
+                    job.customerId!,
                     detailsSnap.data![0].data() as Map<String, dynamic>,
                   );
                 }
                 if (job.vehicleId.isNotEmpty) {
-                  final idx = job.customerId.isNotEmpty ? 1 : 0;
+                  final idx = job.customerId?.isNotEmpty == true ? 1 : 0;
                   if (detailsSnap.data!.length > idx) {
                     vehicle = Vehicle.fromMap(
                       job.vehicleId,
@@ -177,7 +177,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                     _readOnlyField('Customer Name', customer?.name ?? ''),
                     _readOnlyField('Phone', customer?.phone ?? ''),
                     _readOnlyField('Model', vehicle?.model ?? ''),
-                    _readOnlyField('Plate Number', vehicle?.plateNumber ?? ''),
+                    _readOnlyField('Plate Number', vehicle?.plateNo ?? ''),
                     _readOnlyField('Task', job.description),
                     _readOnlyField(
                       'Date',

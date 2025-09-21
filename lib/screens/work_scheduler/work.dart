@@ -66,7 +66,7 @@ class _WorkScheduleScreenState extends State<WorkScheduleScreen> {
       // Build helper maps
       vehiclePlates = {
         for (var v in vehiclesSnapshot.docs)
-          v.id: (v.data()['plateNumber'] ?? 'Unknown') as String
+          v.id: (v.data()['plateNo'] ?? 'Unknown') as String
       };
       mechanicNames = {
         for (var m in mechanicsSnapshot.docs)

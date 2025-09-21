@@ -10,16 +10,22 @@ import 'main_menu.dart'; // NEW
 import 'login_screen.dart';
 
 
+Future<void> _initializeFirebase() async {
+  try {
+    // Initialize Firebase only if not already initialized
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
+  } catch (e) {
+    // If Firebase is already initialized, continue
+    print('Firebase already initialized: $e');
+  }
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Check if Firebase is already initialized
-  if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  }
-
   runApp(const MyApp());
 }
 
@@ -36,16 +42,59 @@ class MyApp extends StatelessWidget {
         title: 'Workshop Manager',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
-        home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
+        home: FutureBuilder<void>(
+          future: _initializeFirebase(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return const Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(height: 16),
+                      Text('Initializing app...'),
+                    ],
+                  ),
+                ),
+              );
             }
-            if (snapshot.hasData) {
-              return const MainMenuScreen(); // go to your main menu with bottom nav
+            
+            if (snapshot.hasError) {
+              return Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.error, size: 64, color: Colors.red),
+                      const SizedBox(height: 16),
+                      Text('Error: ${snapshot.error}'),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Restart the app
+                          main();
+                        },
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
             }
-            return const LoginScreen(); // show login page
+            
+            return StreamBuilder<User?>(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, authSnapshot) {
+                if (authSnapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (authSnapshot.hasData) {
+                  return const MainMenuScreen();
+                }
+                return const LoginScreen();
+              },
+            );
           },
         ),
       ),

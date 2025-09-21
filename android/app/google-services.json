@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "441168981902",
-    "project_id": "job-management-ec8f0",
-    "storage_bucket": "job-management-ec8f0.firebasestorage.app"
+    "project_number": "95851454253",
+    "project_id": "fir-project-1ed17",
+    "storage_bucket": "fir-project-1ed17.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:441168981902:android:c0ca4aab7c4d2c0c64bedf",
+        "mobilesdk_app_id": "1:95851454253:android:362658e277a4b44853fda4",
         "android_client_info": {
           "package_name": "com.example.assignment"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC23qJ_tfhZpLIeoYL5dTGBqAz8qJurK50"
+          "current_key": "AIzaSyAxaA2m0B3z8Nx_Pp6g6dpvP4AllCCJ7fw"
         }
       ],
       "services": {

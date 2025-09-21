@@ -74,7 +74,14 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                 color: const Color(0xFFE8EBF3),
                 height: 180,
                 child: v.imagePath != null && v.imagePath!.isNotEmpty
-                    ? Image.asset('assets/images/vehicles/${v.imagePath}', fit: BoxFit.cover)
+                    ? Image.asset(
+                        'assets/images/vehicles/corolla.jpeg',
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          print('Image load error for ${v.imagePath}: $error');
+                          return const Icon(Icons.directions_car, size: 64, color: Colors.black54);
+                        },
+                      )
                     : const Icon(Icons.directions_car, size: 64, color: Colors.black54),
               ),
             ),

@@ -3,7 +3,6 @@ class Vehicle {
   final String customerId;
   final String make;
   final String model;
-  final String plateNumber;
   final int year;
   final String vin;
   final String plateNo;
@@ -14,7 +13,6 @@ class Vehicle {
     required this.customerId,
     required this.make,
     required this.model,
-    required this.plateNumber,
     required this.year,
     required this.vin,
     required this.plateNo,
@@ -29,11 +27,22 @@ class Vehicle {
       customerId: data['customerId'] ?? '',
       make: data['make'] ?? '',
       model: data['model'] ?? '',
-      plateNumber: data['plateNumber'] ?? '',
       year: year,
       vin: data['vin'] ?? '',
       plateNo: data['plateNo'] ?? '',
       imagePath: data['imagePath'],
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'customerId': customerId,
+      'make': make,
+      'model': model,
+      'year': year,
+      'vin': vin,
+      'plateNo': plateNo,
+      'imagePath': imagePath,
+    };
   }
 }
