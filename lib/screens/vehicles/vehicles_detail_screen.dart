@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../models/models.dart';
 import '../../services/firestore_vehicle_service.dart';
 import '../../utils/formatters.dart';
@@ -31,8 +32,10 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
       final jobs = await _service.getJobsForVehicle(widget.vehicle.id);
       final Map<String, Mechanic> m = {};
       for (final j in jobs) {
-        final mech = await _service.getMechanicById(j.mechanicId);
-        if (mech != null) m[mech.id] = mech;
+        if (j.mechanicId != null && j.mechanicId!.isNotEmpty) {
+          final mech = await _service.getMechanicById(j.mechanicId!);
+          if (mech != null) m[mech.id] = mech;
+        }
       }
       setState(() {
         _customer = customer;
@@ -194,7 +197,7 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                         const Text('No service history yet', style: TextStyle(color: Colors.black54)),
                         const SizedBox(height: 8),
                       ]
-                    : _filteredJobs().map((j) => _JobTile(job: j, mechanic: _mechanics[j.mechanicId])).toList(),
+                    : _filteredJobs().map((j) => _JobTile(job: j, mechanic: j.mechanicId != null ? _mechanics[j.mechanicId!] : null)).toList(),
               ),
             ),
           ],
@@ -292,6 +295,10 @@ class _JobTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<Map<String, String>>(
+      future: _getPartNames(),
+      builder: (context, partSnap) {
+        final partNames = partSnap.data ?? {};
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
@@ -329,8 +336,8 @@ class _JobTile extends StatelessWidget {
                 text: TextSpan(
                   style: const TextStyle(color: Colors.black54, fontSize: 14),
                   children: [
-                    const TextSpan(text: 'Mileage: ', style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: '${job.mileage?.toStringAsFixed(0) ?? '-'} km'),
+                    const TextSpan(text: 'Status: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(text: job.status.isEmpty ? 'Unassigned' : job.status),
                   ],
                 ),
               ),
@@ -345,7 +352,9 @@ class _JobTile extends StatelessWidget {
                     style: const TextStyle(color: Colors.black54, fontSize: 14),
                     children: [
                       const TextSpan(text: 'Scheduled: ', style: TextStyle(fontWeight: FontWeight.bold)),
-                      TextSpan(text: job.scheduledDate != null ? dateDmy.format(job.scheduledDate!) : '-'),
+                      TextSpan(text: job.scheduledDate != null && job.scheduledTime != null 
+                          ? '${dateDmy.format(job.scheduledDate!)} ${job.scheduledTime!.hour.toString().padLeft(2, '0')}:${job.scheduledTime!.minute.toString().padLeft(2, '0')}'
+                          : job.scheduledDate != null ? dateDmy.format(job.scheduledDate!) : '-'),
                     ],
                   ),
                 ),
@@ -361,14 +370,14 @@ class _JobTile extends StatelessWidget {
               ),
             ],
           ),
-          if (job.notes != null && job.notes!.isNotEmpty) ...[
+          if (job.partsUsed.isNotEmpty) ...[
             const SizedBox(height: 4),
             RichText(
               text: TextSpan(
                 style: const TextStyle(color: Colors.black54, fontSize: 14),
                 children: [
-                  const TextSpan(text: 'Notes: ', style: TextStyle(fontWeight: FontWeight.bold)),
-                  TextSpan(text: job.notes!),
+                  const TextSpan(text: 'Parts Used: ', style: TextStyle(fontWeight: FontWeight.bold)),
+                  TextSpan(text: job.partsUsed.map((id) => partNames[id] ?? id).join(', ')),
                 ],
               ),
             ),
@@ -376,6 +385,21 @@ class _JobTile extends StatelessWidget {
         ],
       ),
     );
+      },
+    );
+  }
+
+  Future<Map<String, String>> _getPartNames() async {
+    final Map<String, String> partNames = {};
+    try {
+      final snapshot = await FirebaseFirestore.instance.collection('inventory').get();
+      for (final doc in snapshot.docs) {
+        partNames[doc.id] = doc.data()['name'] ?? doc.id;
+      }
+    } catch (e) {
+      print('Error fetching part names: $e');
+    }
+    return partNames;
   }
 }
 

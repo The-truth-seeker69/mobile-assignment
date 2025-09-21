@@ -69,32 +69,40 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                       // Header Row
                       Container(
                         padding: const EdgeInsets.all(16),
-                        child: Row(
+                        child: Column(
                           children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: _buildAvatar(customer.imagePath, 32),
+                            Row(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: _buildAvatar(customer.imagePath, 32),
+                                ),
+                                const SizedBox(width: 8),
+                                const Expanded(
+                                  child: Text('Customer Details', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                                ),
+                                IconButton(
+                                  onPressed: () => _callNumber(customer.phone),
+                                  icon: const Icon(Icons.phone, color: Colors.black, size: 20),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 8),
-                            const Text('Customer Details', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                            const Spacer(),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xff29c26c),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            const SizedBox(height: 8),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xff29c26c),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(builder: (_) => ChatScreen(customerId: customer.id, customerName: customer.name)),
+                                  );
+                                },
+                                child: const Text('Chat Customer', style: TextStyle(fontSize: 12, color: Colors.white)),
                               ),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(builder: (_) => ChatScreen(customerId: customer.id, customerName: customer.name)),
-                                );
-                              },
-                              child: const Text('Chat Customer', style: TextStyle(fontSize: 12, color: Colors.white)),
-                            ),
-                            const SizedBox(width: 8),
-                            IconButton(
-                              onPressed: () => _callNumber(customer.phone),
-                              icon: const Icon(Icons.phone, color: Colors.black, size: 20),
                             ),
                           ],
                         ),
@@ -351,10 +359,11 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   }
 
   Widget _jobTile(Job j) {
-    return FutureBuilder<Mechanic?>(
-      future: _crm.getMechanic(j.mechanicId),
-      builder: (context, mechSnap) {
-        final mechanicName = mechSnap.hasData ? mechSnap.data!.name : 'Unknown';
+    return FutureBuilder<Map<String, dynamic>>(
+      future: _getJobDetails(j),
+      builder: (context, snap) {
+        final mechanicName = snap.data?['mechanicName'] ?? 'Unknown';
+        final partNames = snap.data?['partNames'] ?? <String, String>{};
         
         return Container(
           padding: const EdgeInsets.all(16),
@@ -362,13 +371,16 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Date and Service Type
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    j.scheduledDate != null ? _formatDate(j.scheduledDate!) : '-',
+                    j.scheduledDate != null && j.scheduledTime != null 
+                        ? '${_formatDate(j.scheduledDate!)} ${j.scheduledTime!.hour.toString().padLeft(2, '0')}:${j.scheduledTime!.minute.toString().padLeft(2, '0')}'
+                        : j.scheduledDate != null ? _formatDate(j.scheduledDate!) : '-',
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
                   ),
-                  const Text(' | ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87)),
+                  const SizedBox(height: 2),
                   Text(
                     j.description,
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.black87),
@@ -376,7 +388,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                 ],
               ),
               const SizedBox(height: 8),
-              // Mechanic and Mileage
+              // Mechanic and Status
               Row(
                 children: [
                   Text(
@@ -389,27 +401,27 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                   ),
                   const Text(' | ', style: TextStyle(fontSize: 12, color: Colors.black87)),
                   Text(
-                    'Mileage: ',
+                    'Status: ',
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black87),
                   ),
                   Text(
-                    '${j.mileage?.toStringAsFixed(0) ?? '-'} km',
+                    j.status.isEmpty ? 'Unassigned' : j.status,
                     style: const TextStyle(fontSize: 12, color: Colors.black87),
                   ),
                 ],
               ),
               const SizedBox(height: 4),
-              // Notes
-              if (j.notes != null && j.notes!.isNotEmpty) ...[
+              // Parts Used
+              if (j.partsUsed.isNotEmpty) ...[
                 Row(
                   children: [
                     Text(
-                      'Notes: ',
+                      'Parts Used: ',
                       style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black87),
                     ),
                     Expanded(
                       child: Text(
-                        j.notes!,
+                        j.partsUsed.map((id) => partNames[id] ?? id).join(', '),
                         style: const TextStyle(fontSize: 12, color: Colors.black87),
                       ),
                     ),
@@ -417,22 +429,6 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                 ),
                 const SizedBox(height: 4),
               ],
-              // Invoice
-              Row(
-                children: [
-                  Text(
-                    'IN 001', // This should be fetched from invoice data
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.black87),
-                  ),
-                  const Text(' - ', style: TextStyle(fontSize: 12, color: Colors.black87)),
-                  Text(
-                    'Debit Card', // This should be fetched from payment method
-                    style: const TextStyle(fontSize: 12, color: Colors.black87),
-                  ),
-                  const Spacer(),
-                  const Icon(Icons.description, size: 16, color: Colors.black54),
-                ],
-              ),
             ],
           ),
         );
@@ -443,6 +439,36 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   String _formatDate(DateTime date) {
     final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     return '${date.day} ${months[date.month - 1]} ${date.year}';
+  }
+
+  Future<Map<String, dynamic>> _getJobDetails(Job job) async {
+    final Map<String, dynamic> result = {};
+    
+    // Get mechanic name
+    if (job.mechanicId != null && job.mechanicId!.isNotEmpty) {
+      try {
+        final mechanic = await _crm.getMechanic(job.mechanicId!);
+        result['mechanicName'] = mechanic?.name ?? 'Unknown';
+      } catch (e) {
+        result['mechanicName'] = 'Unknown';
+      }
+    } else {
+      result['mechanicName'] = 'Unassigned';
+    }
+    
+    // Get part names
+    final Map<String, String> partNames = {};
+    try {
+      final snapshot = await FirebaseFirestore.instance.collection('inventory').get();
+      for (final doc in snapshot.docs) {
+        partNames[doc.id] = doc.data()['name'] ?? doc.id;
+      }
+    } catch (e) {
+      print('Error fetching part names: $e');
+    }
+    result['partNames'] = partNames;
+    
+    return result;
   }
 
 
