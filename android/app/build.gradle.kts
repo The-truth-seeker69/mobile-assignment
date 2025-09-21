@@ -21,6 +21,7 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
+    compileSdk = 35  // or your existing compileSdk
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
@@ -31,6 +32,22 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
+        minSdk = flutter.minSdkVersion
+        targetSdk = 34
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+
+
+
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+
+
+        // You can update the following values to match your application needs.
+        // For more information, see: https://flutter.dev/to/review-gradle-config.
+        minSdk = 23
+        targetSdk = 34
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
     }
     ndkVersion = "27.0.12077973" // ← add this line
 

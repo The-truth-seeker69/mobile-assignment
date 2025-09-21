@@ -22,7 +22,6 @@ Future<void> _initializeFirebase() async {
     // If Firebase is already initialized, continue
     print('Firebase already initialized: $e');
   }
-}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,7 +58,7 @@ class MyApp extends StatelessWidget {
                 ),
               );
             }
-            
+
             if (snapshot.hasError) {
               return Scaffold(
                 body: Center(
@@ -82,7 +81,7 @@ class MyApp extends StatelessWidget {
                 ),
               );
             }
-            
+
             return StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, authSnapshot) {
