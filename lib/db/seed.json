@@ -249,7 +249,7 @@
     "IT001": {
       "category": "Brake",
       "createdAt": "16 September 2025 at 14:11:22 UTC+8",
-      "imagePath": "IT001.jpg",
+      "imagePath": "assets/images/inv/IT001.jpg",
       "isLowStock": true,
       "itemID": "IT001",
       "lastRefill": null,
@@ -262,7 +262,7 @@
     "IT002": {
       "category": "Engine",
       "createdAt": "17 September 2025 at 10:00:00 UTC+8",
-      "imagePath": "IT002.jpg",
+      "imagePath": "assets/images/inv/IT002.jpg",
       "isLowStock": false,
       "itemID": "IT002",
       "lastRefill": null,
@@ -275,7 +275,7 @@
     "IT003": {
       "category": "Transmission",
       "createdAt": "17 September 2025 at 10:05:00 UTC+8",
-      "imagePath": "IT003.jpg",
+      "imagePath": "assets/images/inv/IT003.jpg",
       "isLowStock": false,
       "itemID": "IT003",
       "lastRefill": null,
@@ -288,7 +288,7 @@
     "IT004": {
       "category": "Electrical",
       "createdAt": "17 September 2025 at 10:10:00 UTC+8",
-      "imagePath": "IT004.jpg",
+      "imagePath": "assets/images/inv/IT004.jpg",
       "isLowStock": false,
       "itemID": "IT004",
       "lastRefill": null,
@@ -301,7 +301,7 @@
     "IT005": {
       "category": "Suspension",
       "createdAt": "17 September 2025 at 10:15:00 UTC+8",
-      "imagePath": "IT005.jpg",
+      "imagePath": "assets/images/inv/IT005.jpg",
       "isLowStock": true,
       "itemID": "IT005",
       "lastRefill": null,
@@ -314,7 +314,7 @@
     "IT006": {
       "category": "Body",
       "createdAt": "17 September 2025 at 10:20:00 UTC+8",
-      "imagePath": "IT006.jpg",
+      "imagePath": "assets/images/inv/IT006.jpg",
       "isLowStock": false,
       "itemID": "IT006",
       "lastRefill": null,
@@ -327,7 +327,7 @@
     "IT007": {
       "category": "Interior",
       "createdAt": "17 September 2025 at 10:25:00 UTC+8",
-      "imagePath": "IT007.jpg",
+      "imagePath": "assets/images/inv/IT007.jpg",
       "isLowStock": false,
       "itemID": "IT007",
       "lastRefill": null,
