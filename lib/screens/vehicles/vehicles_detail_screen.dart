@@ -31,10 +31,8 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
       final jobs = await _service.getJobsForVehicle(widget.vehicle.id);
       final Map<String, Mechanic> m = {};
       for (final j in jobs) {
-        if (j.mechanicId != null) {
-          final mech = await _service.getMechanicById(j.mechanicId!);
-          if (mech != null) m[mech.id] = mech;
-        }
+        final mech = await _service.getMechanicById(j.mechanicId);
+        if (mech != null) m[mech.id] = mech;
       }
       setState(() {
         _customer = customer;

@@ -352,7 +352,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
 
   Widget _jobTile(Job j) {
     return FutureBuilder<Mechanic?>(
-      future: j.mechanicId != null ? _crm.getMechanic(j.mechanicId!) : Future.value(null),
+      future: _crm.getMechanic(j.mechanicId),
       builder: (context, mechSnap) {
         final mechanicName = mechSnap.hasData ? mechSnap.data!.name : 'Unknown';
         

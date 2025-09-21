@@ -230,13 +230,43 @@
   "mechanics": {
     "mech001": {
       "name": "Ali Bin Omar",
-      "specialization": "Engine Repair",
-      "availability": true
+      "specialization": "Engine Repair"
     },
     "mech002": {
       "name": "James Tan",
-      "specialization": "Brake Systems",
-      "availability": true
+      "specialization": "Brake Systems"
+    },
+    "mech003": {
+      "name": "James",
+      "specialization": "Brake Systems"
+    },
+    "mech004": {
+      "name": "Zain",
+      "specialization": "Air Conditioning"
+    },
+    "mech005": {
+      "name": "Daniel Lee",
+      "specialization": "Suspension & Steering"
+    },
+    "mech006": {
+      "name": "Siti Aisyah",
+      "specialization": "Electrical Systems"
+    },
+    "mech007": {
+      "name": "Arif Hassan",
+      "specialization": "Wheel Alignment"
+    },
+    "mech008": {
+      "name": "Mei Ling",
+      "specialization": "Tire & Wheel Services"
+    },
+    "mech009": {
+      "name": "Rahul Kumar",
+      "specialization": "Exhaust Systems"
+    },
+    "mech010": {
+      "name": "Fatimah Yusuf",
+      "specialization": "Battery & Charging"
     }
   },
   "inventory": {
@@ -250,8 +280,7 @@
       "name": "Brake Pad",
       "quantity": 5,
       "remarks": "brake",
-      "supplier": "Toyota",
-      "usageLog": []
+      "supplier": "Toyota"
     },
     "IT002": {
       "category": "Engine",
@@ -263,8 +292,7 @@
       "name": "Engine Oil Filter",
       "quantity": 12,
       "remarks": "filter",
-      "supplier": "Honda",
-      "usageLog": []
+      "supplier": "Honda"
     },
     "IT003": {
       "category": "Transmission",
@@ -276,8 +304,7 @@
       "name": "Clutch Plate",
       "quantity": 7,
       "remarks": "manual transmission",
-      "supplier": "Mazda",
-      "usageLog": []
+      "supplier": "Mazda"
     },
     "IT004": {
       "category": "Electrical",
@@ -289,8 +316,7 @@
       "name": "Car Battery",
       "quantity": 9,
       "remarks": "12V battery",
-      "supplier": "Bosch",
-      "usageLog": []
+      "supplier": "Bosch"
     },
     "IT005": {
       "category": "Suspension",
@@ -302,8 +328,7 @@
       "name": "Shock Absorber",
       "quantity": 3,
       "remarks": "rear suspension",
-      "supplier": "Perodua",
-      "usageLog": []
+      "supplier": "Perodua"
     },
     "IT006": {
       "category": "Body",
@@ -315,8 +340,7 @@
       "name": "Front Bumper",
       "quantity": 6,
       "remarks": "plastic body part",
-      "supplier": "Proton",
-      "usageLog": []
+      "supplier": "Proton"
     },
     "IT007": {
       "category": "Interior",
@@ -328,8 +352,7 @@
       "name": "Car Seat Cover",
       "quantity": 15,
       "remarks": "leather cover",
-      "supplier": "Universal",
-      "usageLog": []
+      "supplier": "Universal"
     }
   },
   "invoices": {

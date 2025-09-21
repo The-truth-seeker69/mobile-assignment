@@ -2,7 +2,7 @@ class Job {
   final String id;
   final String? customerId;
   final String vehicleId;
-  final String? mechanicId;
+  final String mechanicId;
   final String status;
   final DateTime? scheduledDate;
   final DateTime? scheduledTime;
@@ -16,7 +16,7 @@ class Job {
     required this.id,
     this.customerId,
     required this.vehicleId,
-    this.mechanicId,
+    required this.mechanicId,
     required this.status,
     required this.scheduledDate,
     required this.scheduledTime,
@@ -32,7 +32,7 @@ class Job {
         id: id,
         customerId: data['customerId'] ?? '',
         vehicleId: data['vehicleId'] ?? '',
-        mechanicId: data['mechanicId'] as String?,
+        mechanicId: data['mechanicId'] ?? '',
         status: data['status'] ?? '',
         scheduledDate: _parseDate(data['scheduledDate']),
         scheduledTime: _parseDate(data['scheduledTime']),
