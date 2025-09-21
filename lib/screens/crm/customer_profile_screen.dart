@@ -216,7 +216,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                   style: const TextStyle(color: Colors.black87, fontSize: 14),
                   children: [
                     const TextSpan(text: 'Plate No: ', style: TextStyle(fontWeight: FontWeight.bold)),
-                    TextSpan(text: v.plateNo),
+                    TextSpan(text: v.plateNumber),
                   ],
                 ),
               ),
@@ -352,7 +352,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
 
   Widget _jobTile(Job j) {
     return FutureBuilder<Mechanic?>(
-      future: _crm.getMechanic(j.mechanicId),
+      future: j.mechanicId != null ? _crm.getMechanic(j.mechanicId!) : Future.value(null),
       builder: (context, mechSnap) {
         final mechanicName = mechSnap.hasData ? mechSnap.data!.name : 'Unknown';
         

@@ -10,7 +10,7 @@ Future<File?> getInventoryImage(String? filename) async {
   if (filename == null || filename.isEmpty) return null;
 
   // If it's an asset, return null (we'll handle in UI)
-  if (filename.startsWith("assets/")) return null;
+  if (filename.startsWith("assets/") || !filename.startsWith("/")) return null;
 
   // Otherwise look inside documents directory
   final appDir = await getApplicationDocumentsDirectory();
@@ -295,12 +295,20 @@ class _InventoryScreenState extends State<InventoryScreen> {
               borderRadius: BorderRadius.circular(8),
             ),
 
-            child: item.imagePath.startsWith("assets/")
+            child: item.imagePath.isNotEmpty && !item.imagePath.startsWith("/")
                 ? Image.asset(
-                    item.imagePath,
+                    'assets/images/inventory/${item.imagePath}',
                     width: 70,
                     height: 50,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      print('Image load error for ${item.imagePath}: $error');
+                      return const Icon(
+                        Icons.inventory_2,
+                        color: Colors.grey,
+                        size: 30,
+                      );
+                    },
                   )
                 : FutureBuilder<File?>(
                     future: getInventoryImage(item.imagePath),

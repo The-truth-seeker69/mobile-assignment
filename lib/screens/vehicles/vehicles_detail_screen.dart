@@ -31,8 +31,10 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
       final jobs = await _service.getJobsForVehicle(widget.vehicle.id);
       final Map<String, Mechanic> m = {};
       for (final j in jobs) {
-        final mech = await _service.getMechanicById(j.mechanicId);
-        if (mech != null) m[mech.id] = mech;
+        if (j.mechanicId != null) {
+          final mech = await _service.getMechanicById(j.mechanicId!);
+          if (mech != null) m[mech.id] = mech;
+        }
       }
       setState(() {
         _customer = customer;
@@ -75,7 +77,7 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                 height: 180,
                 child: v.imagePath != null && v.imagePath!.isNotEmpty
                     ? Image.asset(
-                        'assets/images/vehicles/corolla.jpeg',
+                        'assets/images/vehicles/${v.imagePath}',
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           print('Image load error for ${v.imagePath}: $error');
@@ -93,7 +95,7 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                 style: const TextStyle(color: Colors.black87, fontSize: 16),
                 children: [
                   const TextSpan(text: 'Plate No: ', style: TextStyle(fontWeight: FontWeight.bold)),
-                  TextSpan(text: v.plateNo),
+                  TextSpan(text: v.plateNumber),
                 ],
               ),
             ),

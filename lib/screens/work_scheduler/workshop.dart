@@ -33,7 +33,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
     final jobData = jobDoc.data()!;
     final date = jobData['scheduledDate'] as String? ?? '';
     final time = jobData['scheduledTime'] as String? ?? '';
-    final currentMechId = jobData['mechanicId'] as String? ?? '';
+    final currentMechId = jobData['mechanicId'] as String?;
 
     final DateTime? thisJobDT = _combineDateTime(date, time);
 
@@ -68,7 +68,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
       mechanicIdToName
         ..clear()
         ..addAll(map);
-      busyMechanicIds = busy.difference({currentMechId});
+      busyMechanicIds = busy.difference({currentMechId ?? ''});
     });
   }
 
@@ -177,7 +177,7 @@ class _JobDetailsScreenState extends State<JobDetailsScreen> {
                     _readOnlyField('Customer Name', customer?.name ?? ''),
                     _readOnlyField('Phone', customer?.phone ?? ''),
                     _readOnlyField('Model', vehicle?.model ?? ''),
-                    _readOnlyField('Plate Number', vehicle?.plateNo ?? ''),
+                    _readOnlyField('Plate Number', vehicle?.plateNumber ?? ''),
                     _readOnlyField('Task', job.description),
                     _readOnlyField(
                       'Date',

@@ -64,7 +64,7 @@ class _VehiclesListScreenState extends State<VehiclesListScreen> {
                   List<Vehicle> list = (snapshot.data ?? const <Vehicle>[]);
                   if (_query.isNotEmpty) {
                     list = list.where((v) {
-                      final text = '${v.make} ${v.model} ${v.plateNo} ${v.vin}'.toLowerCase();
+                      final text = '${v.make} ${v.model} ${v.plateNumber} ${v.vin}'.toLowerCase();
                       return text.contains(_query.toLowerCase());
                     }).toList();
                   }
@@ -192,9 +192,9 @@ class _VehicleCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('${vehicle.make} ${vehicle.model} ${vehicle.year}', style: const TextStyle(fontWeight: FontWeight.w700)),
+                Text('${vehicle.id} - ${vehicle.make} ${vehicle.model} ${vehicle.year}', style: const TextStyle(fontWeight: FontWeight.w700)),
                 const SizedBox(height: 2),
-                Text(vehicle.plateNo, style: const TextStyle(color: Colors.black54)),
+                Text('Vehicle Plate: ${vehicle.plateNumber}', style: const TextStyle(color: Colors.black54)),
               ],
             ),
           ),

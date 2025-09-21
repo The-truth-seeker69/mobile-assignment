@@ -5,7 +5,7 @@ class Vehicle {
   final String model;
   final int year;
   final String vin;
-  final String plateNo;
+  final String plateNumber;
   final String? imagePath; // asset file name under assets/images/vehicles/
 
   const Vehicle({
@@ -15,7 +15,7 @@ class Vehicle {
     required this.model,
     required this.year,
     required this.vin,
-    required this.plateNo,
+    required this.plateNumber,
     this.imagePath,
   });
 
@@ -29,7 +29,7 @@ class Vehicle {
       model: data['model'] ?? '',
       year: year,
       vin: data['vin'] ?? '',
-      plateNo: data['plateNo'] ?? '',
+      plateNumber: data['plateNumber'] ?? '',
       imagePath: data['imagePath'],
     );
   }
@@ -41,7 +41,7 @@ class Vehicle {
       'model': model,
       'year': year,
       'vin': vin,
-      'plateNo': plateNo,
+      'plateNumber': plateNumber,
       'imagePath': imagePath,
     };
   }

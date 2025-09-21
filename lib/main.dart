@@ -22,6 +22,7 @@ Future<void> _initializeFirebase() async {
     // If Firebase is already initialized, continue
     print('Firebase already initialized: $e');
   }
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
